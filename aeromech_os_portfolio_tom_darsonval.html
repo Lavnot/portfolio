@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroMech OS v2.7 — Tom Darsonval | Ingénieur Mécanique & Robotique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            space: {
+              950: '#060a14',
+              900: '#0b1120',
+              800: '#11192e',
+              700: '#1a2642',
+            },
+            telemetry: {
+              cyan: '#38bdf8',
+              amber: '#f59e0b',
+              emerald: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    .selectable-text {
+      user-select: text;
+    }
+    body {
+      background-color: #060a14;
+      background-image: 
+        radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.12) 0%, transparent 42%),
+        radial-gradient(circle at 82% 78%, rgba(245, 158, 11, 0.08) 0%, transparent 45%),
+        linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      overflow: hidden;
+    }
+
+    /* Glassmorphism panels */
+    .glass-panel {
+      background: rgba(13, 21, 38, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      box-shadow: 0 22px 50px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    }
+
+    .glass-bar {
+      background: rgba(8, 13, 26, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+    }
+
+    .glass-dock {
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Custom Scrollbar inside windows */
+    .os-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .os-scroll::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .os-scroll::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.3);
+      border-radius: 9999px;
+    }
+    .os-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 189, 248, 0.55);
+    }
+
+    /* Window transition */
+    .os-window {
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .os-window.minimized {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.92) translateY(30px);
+    }
+    .os-window.maximized {
+      top: 36px !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: calc(100vh - 104px) !important;
+      border-radius: 0 !important;
+    }
+
+    /* Desktop icon hover */
+    .desktop-icon:hover .icon-box {
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.22);
+    }
+
+    /* Print styling for CV export */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-cv, #printable-cv * {
+        visibility: visible;
+      }
+      #printable-cv {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body class="text-slate-100 font-sans h-screen w-screen relative">
+
+  <!-- Toast Notification (Replaces alert) -->
+  <div id="os-toast" class="fixed top-12 right-4 z-[9999] transform translate-x-full opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="glass-panel px-4 py-2.5 rounded-xl border-emerald-400/40 flex items-center gap-2.5 shadow-xl">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span id="os-toast-msg" class="text-xs font-mono text-emerald-300">Notification</span>
+    </div>
+  </div>
+
+  <!-- TOP MISSION CONTROL BAR -->
+  <header class="glass-bar fixed top-0 left-0 right-0 h-9 z-[1000] px-3 sm:px-5 flex items-center justify-between text-xs">
+    <div class="flex items-center gap-3">
+      <button onclick="toggleStartMenu()" class="flex items-center gap-2 font-mono font-bold text-sky-400 hover:text-sky-300 transition px-2 py-1 rounded-lg hover:bg-sky-400/10">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>AeroMech OS</span>
+        <span class="hidden sm:inline text-[10px] text-slate-400 font-normal">v2.7</span>
+      </button>
+      <span class="hidden md:inline-block text-slate-600">|</span>
+      <span class="hidden md:inline-flex items-center gap-1.5 font-mono text-[11px] text-slate-300">
+        <span class="text-sky-400">SYS:</span> TOM DARSONVAL // SIGMA CLERMONT
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-4">
+      <!-- Availability Telemetry Badge -->
+      <div class="hidden sm:flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 px-2.5 py-0.5 rounded-full font-mono text-[10px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        <span data-i18n="statusBadge">DISPO PFE : MARS – SEPT 2027</span>
+      </div>
+
+      <!-- Language Toggle FR / EN -->
+      <div class="flex items-center bg-slate-900/90 border border-sky-500/30 rounded-lg p-0.5 font-mono text-[11px]">
+        <button id="btn-lang-fr" onclick="setLanguage('fr')" class="px-2 py-0.5 rounded-md bg-sky-500 text-slate-950 font-bold transition">FR</button>
+        <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition">EN</button>
+      </div>
+
+      <!-- Live Clock -->
+      <div id="os-clock" class="font-mono text-[11px] text-slate-300 tabular-nums">
+        20:01 UTC+1
+      </div>
+    </div>
+  </header>
+
+  <!-- START / QUICK LAUNCHER MENU -->
+  <div id="start-menu" class="hidden fixed top-10 left-3 z-[1050] w-72 glass-panel rounded-2xl p-3 shadow-2xl border-sky-400/30">
+    <div class="pb-2.5 mb-2.5 border-b border-slate-700/70 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center font-mono font-bold text-white shadow-lg">
+        TD
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-white">Tom Darsonval</div>
+        <div class="text-[11px] font-mono text-sky-400" data-i18n="roleShort">Élève-Ingénieur Mécanique</div>
+      </div>
+    </div>
+    <div class="space-y-1 text-xs" id="start-menu-items"></div>
+    <div class="mt-3 pt-2.5 border-t border-slate-700/70 flex justify-between items-center text-[11px] font-mono text-slate-400">
+      <span>SIGMA Clermont (PGE)</span>
+      <button onclick="copyText('tom.darsonval@sigma-clermont.fr', 'Email copié !')" class="text-sky-400 hover:underline">Copy Mail</button>
+    </div>
+  </div>
+
+  <!-- MAIN DESKTOP WORKSPACE -->
+  <main id="desktop-workspace" class="relative w-full h-full pt-9 pb-20 overflow-hidden">
+    
+    <!-- Subtle Background Telemetry Watermark -->
+    <div class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.04]">
+      <svg class="w-[520px] h-[520px]" viewBox="0 0 200 200" fill="none" stroke="#38bdf8" stroke-width="0.6">
+        <circle cx="100" cy="100" r="90" stroke-dasharray="4 4"/>
+        <circle cx="100" cy="100" r="65"/>
+        <circle cx="100" cy="100" r="35" stroke-dasharray="2 2"/>
+        <line x1="0" y1="100" x2="200" y2="100"/>
+        <line x1="100" y1="0" x2="100" y2="200"/>
+      </svg>
+    </div>
+
+    <!-- DESKTOP ICONS GRID (Left Column on Desktop, Full App Grid on Mobile) -->
+    <div id="desktop-icons-container" class="relative z-10 p-4 sm:p-6 grid grid-cols-3 sm:grid-cols-1 gap-4 sm:gap-5 sm:w-36 max-w-md mx-auto sm:mx-0">
+      <!-- Populated dynamically by JS -->
+    </div>
+
+    <!-- WINDOWS CONTAINER -->
+    <div id="windows-container" class="absolute inset-0 top-9 bottom-16 pointer-events-none">
+      <!-- Windows injected dynamically by JS -->
+    </div>
+
+  </main>
+
+  <!-- BOTTOM GLASSMORPHIC DOCK (Desktop & Tablet) -->
+  <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 z-[1000] max-w-[95vw]">
+    <div id="os-dock" class="glass-dock px-3 py-2 rounded-2xl flex items-center gap-2 sm:gap-3">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </nav>
+
+  <script>
+    // ==========================================
+    // 1. BILINGUAL CONTENT & DATA REPOSITORY
+    // ==========================================
+    let currentLang = 'fr';
+    let highestZ = 50;
+
+    const i18n = {
+      fr: {
+        statusBadge: "DISPO PFE : MARS – SEPT 2027",
+        roleShort: "Ingénieur Mécanique & Robotique",
+        apps: {
+          profile: { title: "Profil_&_Objectif_PFE.txt", label: "Profil & PFE" },
+          projects: { title: "01_Projets_&_Preuves", label: "Projets & Preuves" },
+          radar: { title: "Radar_Compétences.app", label: "Compétences" },
+          cv: { title: "CV_Tom_Darsonval.pdf", label: "CV FR / EN" },
+          contact: { title: "Mission_Control_Contact.app", label: "Contact & Réf." },
+          trash: { title: "Corbeille_&_Coulisses", label: "Coulisses" }
+        },
+        profile: {
+          badge: "RECHERCHE STAGE DE FIN D'ÉTUDES (PFE — 6 MOIS)",
+          dates: "15 Mars 2027 – 25 Septembre 2027",
+          headline: "Élève-Ingénieur dernière année Mécanique & Robotique — SIGMA Clermont",
+          subheadline: "Filière Machines, Robots et Systèmes • Parcours CPGE PT* (Lycée Henri Loritz, Nancy)",
+          pitch: "Je conçois, simule et industrialise des systèmes mécaniques robustes destinés aux environnements exigeants. Mon parcours allie modélisation analytique et essais expérimentaux (stage recherche aérospatiale à Prague) à la conception terrain et robotique (Projet Perseus soutenu par le CNES).",
+          sectorsTitle: "Secteurs & Domaines Visés",
+          sectors: ["Aéronautique", "Spatial / NewSpace", "Robotique de pointe", "R&D Structures & RDM", "Industrialisation & Procédés", "Instrumentation & Essais"],
+          btnProjects: "Explorer mes Preuves Projets",
+          btnCV: "Consulter mon CV (FR/EN)",
+          btnCopy: "Copier mon e-mail"
+        },
+        projects: {
+          intro: "Approche Par Compétences (APC) : chaque projet démontre la démarche d'ingénierie complète — Contexte, Actions & Outils, Résultats & Analyse réflexive.",
+          tabs: ["1. R&D Capteurs FBG (Prague)", "2. Robot Spatial Perseus (CNES)", "3. Indus & CAO (SIGMA)"],
+          cases: [
+            {
+              tag: "R&D AÉROSPATIALE & SHM • JUIN – SEPT 2026 (530H)",
+              title: "Modélisation Thermo-Hygro-Mécanique de Capteurs à Fibre Optique (FBG)",
+              org: "Department of Aerospace Engineering — CTU in Prague (République Tchèque)",
+              contextTitle: "Contexte & Problématique",
+              context: "Dans le cadre du Structural Health Monitoring (SHM) des structures aéronautiques, les capteurs à réseau de Bragg (FBG) mesurent les déformations internes. Problème : la température et l'humidité relative génèrent des sensibilités croisées qui biaisent la mesure mécanique.",
+              actionsTitle: "Actions Menées & Moyens Techniques",
+              actions: [
+                "Formulation de modèles analytiques de sensibilités croisées (température / humidité) sur fibres optiques à revêtement primaire.",
+                "Développement de la mécanique de transfert de déformation (modèle shear-lag) et calcul des valeurs prédictives sur 6 substrats (Invar, acier, cuivre, duralumin...).",
+                "Rédaction des protocoles d'essais, préparation/usinage d'éprouvettes instrumentées et pilotage d'une chaîne couplant enceinte climatique ACS et banc de traction MTS Criterion.",
+                "Traitement des données expérimentales sous Python & MATLAB et rédaction du rapport technique complet en LaTeX."
+              ],
+              resultsTitle: "Résultats & Bilan Réflexif",
+              results: "Établissement de valeurs de référence prédictives validées expérimentalement, permettant d'isoler la déformation mécanique pure. Cette expérience internationale de 4 mois m'a appris à gérer l'incertitude de mesure et à confronter un modèle théorique aux contraintes réelles de laboratoire.",
+              tools: ["Python", "MATLAB", "LaTeX", "Banc MTS Criterion", "Enceinte ACS", "Capteurs FBG", "Modèle Shear-Lag"]
+            },
+            {
+              tag: "SPATIAL & ROBOTIQUE MOBILE • 2024 – 2026 (ÉQUIPE DE 8)",
+              title: "Robot Mobile Multifonction de Sécurité sur Pas de Tir (Projet Perseus)",
+              org: "Projet Spatial Étudiant soutenu par le CNES (100h+)",
+              contextTitle: "Contexte & Problématique",
+              context: "Sécuriser les opérations au sol lors des campagnes de lancement de fusées expérimentales en déployant un système robotisé capable d'inspecter la zone de tir à distance et d'assister la mise en œuvre du lanceur.",
+              actionsTitle: "Actions Menées & Moyens Techniques",
+              actions: [
+                "Rédaction du cahier des charges technique et dimensionnement mécanique complet du prototype (châssis aluminium, choix de la motorisation).",
+                "Modélisation CAO 3D complète et réalisation de simulations de contraintes par éléments finis (FEA) pour valider la tenue mécanique.",
+                "Intégration d'une liaison télémétrique longue portée LoRa et d'un système de pilotage vidéo 360° à faible latence.",
+                "Conception en équipe pluridisciplinaire (2024–2025) d'un dispositif mécanique dédié au support au décollage du lanceur."
+              ],
+              resultsTitle: "Résultats & Bilan Réflexif",
+              results: "Validation d'un châssis léger, rigide et modulaire répondant aux exigences du cahier des charges CNES. Le travail en équipe de 8 ingénieurs m'a appris à gérer les interfaces mécatroniques (encombrement capteurs/caméra vs rigidité structurelle).",
+              tools: ["CATIA V5 / SolidWorks", "Calcul FEA", "Télémétrie LoRa", "Vidéo 360°", "Dimensionnement Châssis Alu"]
+            },
+            {
+              tag: "INDUSTRIALISATION & CONCEPTION AÉRO • 2024 – 2027",
+              title: "Ingénierie de Fabrication Aéronautique, Qualité & Optimisation",
+              org: "SIGMA Clermont — Cycle Ingénieur Génie Mécanique",
+              contextTitle: "Contexte & Problématique",
+              context: "Maîtriser l'ensemble du cycle de vie d'une pièce aéronautique ou d'un système automatisé : de l'allègement topologique en bureau d'études jusqu'à la maîtrise de la capabilité en production.",
+              actionsTitle: "Actions Menées & Moyens Techniques",
+              actions: [
+                "Conception & Allègement : Dimensionnement d'assemblages structuraux (vissés, collés), matériaux composites/plastiques (thermoformage, injection) et optimisation topologique sous ANSYS & Inspire.",
+                "Industrialisation & Qualité : Élaboration de gammes d'usinage, cotation fonctionnelle & transfert de cotes, conception de montages d'usinage (DFM/DFA), AMDEC Process, Plans d'Expériences (DOE) et MSP (Cp, Cpk).",
+                "Robotique Industrielle : Programmation hors-ligne de cellules robotisées sous RoboDK et programmation d'automates (GRAFCET / IEC 61131, sécurité machine ISO 13849)."
+              ],
+              resultsTitle: "Résultats & Bilan Réflexif",
+              results: "Acquisition d'une double culture « Bureau d'Études / Atelier » : concevoir une pièce performante tout en garantissant sa fabricabilité, son contrôle qualité et la sécurité des opérateurs.",
+              tools: ["ANSYS", "Altair Inspire", "CATIA V5", "DFM / DFA", "AMDEC & MSP (Cp/Cpk)", "RoboDK", "GRAFCET"]
+            }
+          ]
+        },
+        radar: {
+          title: "Matrice de Compétences & Certifications",
+          subtitle: "Cliquez sur une compétence ou filtrez par domaine technique",
+          axes: ["Conception & CAO", "Simulation & RDM", "Instrumentation & Essais", "Industrialisation & Qualité", "Code & Automatisme"],
+          certsTitle: "Certifications & Habilitations",
+          certs: [
+            { name: "BIA — Brevet d'Initiation Aéronautique", detail: "Culture aéronautique, aérodynamique, navigation" },
+            { name: "Fabrication Additive (IMT)", detail: "Impression 3D industrielle & contraintes procédés" },
+            { name: "Certifié INRS", detail: "Prévention des risques & sécurité en environnement industriel" },
+            { name: "Permis B", detail: "Mobilité nationale & internationale" }
+          ],
+          langsTitle: "Langues de Travail",
+          langs: [
+            { lang: "Français", level: "Langue maternelle", pct: 100 },
+            { lang: "Anglais", level: "B2 — Professionnel (Stage Prague & rapport LaTeX)", pct: 82 },
+            { lang: "Allemand", level: "B1 — Intermédiaire", pct: 55 }
+          ]
+        },
+        cv: {
+          switchFR: "Version Française",
+          switchEN: "English Resume",
+          printBtn: "Imprimer / Exporter PDF",
+          note: "Astuce recruteur : Utilisez le bouton « Imprimer / Exporter PDF » pour enregistrer immédiatement une copie propre de ce CV."
+        },
+        contact: {
+          title: "Mission Control — Contact & Références",
+          subtitle: "Disponible pour un échange téléphonique ou un entretien en visio concernant un stage PFE (Mars – Sept 2027).",
+          copyEmail: "Copier l'email école",
+          copyGmail: "Copier Gmail",
+          copyPhone: "Copier le téléphone",
+          openLinkedin: "Ouvrir LinkedIn",
+          refTitle: "Référence Académique",
+          refRole: "Professeur — SIGMA Clermont (Mécanique & Structures)",
+          quickMsgTitle: "Générateur de prise de contact rapide",
+          companyPlaceholder: "Nom de votre entreprise (ex: Airbus, Safran, ArianeGroup...)",
+          rolePlaceholder: "Intitulé du poste / équipe (ex: Stage R&D Structures)",
+          sendMailBtn: "Préparer l'e-mail dans ma messagerie"
+        },
+        trash: {
+          title: "Coulisses, Engagements & Retours d'Expérience",
+          subtitle: "Ce qui ne rentre pas toujours dans les cases techniques d'un CV, mais forge un ingénieur adaptable.",
+          items: [
+            {
+              icon: "🌐",
+              title: "Polyvalence Terrain & Web — Bab'Kasia (Été 2025)",
+              desc: "Expérience commerciale de 2 mois (Pont-à-Mousson) : gestion des stocks, logistique de livraison, relation client et création complète du site internet de l'entreprise."
+            },
+            {
+              icon: "🎉",
+              title: "Gestion de Projet Associatif — FizZteam (2025–2026)",
+              desc: "Organisation et coordination logistique des événements rythmant la vie étudiante de SIGMA Clermont. Gestion d'équipe, budget et imprévus en temps réel."
+            },
+            {
+              icon: "✈️",
+              title: "Passion Aéronautique & Sport en Plein Air",
+              desc: "Membre actif d'associations aéronautiques (titulaire du BIA) et pratique régulière de sports de plein air en compétition/association."
+            },
+            {
+              icon: "🔧",
+              title: "Leçon d'Ingénierie : L'itération Essai / Modèle",
+              desc: "À Prague comme sur le robot Perseus, les premiers résultats théoriques ne collent jamais à 100 % au réel (dilatation thermique différentielle des substrats, jeu mécanique). La rigueur expérimentale fait la différence."
+            }
+          ]
+        }
+      },
+      en: {
+        statusBadge: "AVAILABLE PFE: MAR – SEPT 2027",
+        roleShort: "Mechanical & Robotics Engineer",
+        apps: {
+          profile: { title: "Profile_&_PFE_Goal.txt", label: "Profile & Goal" },
+          projects: { title: "01_Projects_&_Proofs", label: "Projects & Proofs" },
+          radar: { title: "Skills_Radar.app", label: "Skills Matrix" },
+          cv: { title: "CV_Tom_Darsonval.pdf", label: "Resume EN / FR" },
+          contact: { title: "Mission_Control_Contact.app", label: "Contact & Ref." },
+          trash: { title: "Behind_The_Scenes", label: "Backstage" }
+        },
+        profile: {
+          badge: "SEEKING 6-MONTH GRADUATION INTERNSHIP (PFE)",
+          dates: "March 15, 2027 – September 25, 2027",
+          headline: "Final-Year Mechanical & Robotics Engineering Student — SIGMA Clermont",
+          subheadline: "Machines, Robots & Systems Track • CPGE PT* (Lycée Henri Loritz, Nancy)",
+          pitch: "I design, simulate, and industrialize robust mechanical systems for extreme environments. My background combines analytical modeling and experimental lab testing (Aerospace research internship in Prague) with hands-on mechanical & robotics design (CNES-supported Perseus Space Project).",
+          sectorsTitle: "Target Sectors & Domains",
+          sectors: ["Aeronautics", "Space / NewSpace", "Advanced Robotics", "Structural R&D & FEA", "Manufacturing & Industrialization", "Instrumentation & Testing"],
+          btnProjects: "Explore Project Case Studies",
+          btnCV: "View Resume (EN/FR)",
+          btnCopy: "Copy Email Address"
+        },
+        projects: {
+          intro: "Competency-Based Engineering Portfolio: each project demonstrates the end-to-end engineering workflow — Context, Actions & Tools, Results & Reflexive Analysis.",
+          tabs: ["1. FBG Sensors R&D (Prague)", "2. Perseus Space Robot (CNES)", "3. Aero Mfg & CAD (SIGMA)"],
+          cases: [
+            {
+              tag: "AEROSPACE R&D & SHM • JUNE – SEPT 2026 (530H)",
+              title: "Thermo-Hygro-Mechanical Modelling of Fiber Bragg Grating (FBG) Sensors",
+              org: "Department of Aerospace Engineering — CTU in Prague (Czech Republic)",
+              contextTitle: "Context & Engineering Challenge",
+              context: "In Structural Health Monitoring (SHM) for aerospace structures, Fiber Bragg Grating (FBG) optical sensors track internal strain. Challenge: temperature and relative humidity create cross-sensitivities that distort mechanical strain readings.",
+              actionsTitle: "Actions & Technical Execution",
+              actions: [
+                "Formulated analytical models describing temperature and relative humidity cross-sensitivities on primary-coated optical fibers.",
+                "Applied a shear-lag strain-transfer model and computed predictive benchmark values across 6 substrates (Invar, steel, copper, duralumin).",
+                "Authored experimental testing protocols, machined instrumented test coupons, and operated a measurement chain combining an ACS climatic chamber and an MTS Criterion tensile bench.",
+                "Processed experimental datasets in Python & MATLAB and authored the complete technical report in LaTeX."
+              ],
+              resultsTitle: "Results & Reflexive Takeaway",
+              results: "Established experimentally validated predictive reference values to decouple pure mechanical strain from environmental drift. This 4-month international research internship strengthened my expertise in measurement uncertainty and model-to-test correlation.",
+              tools: ["Python", "MATLAB", "LaTeX", "MTS Criterion Bench", "ACS Climatic Chamber", "FBG Sensors", "Shear-Lag Model"]
+            },
+            {
+              tag: "SPACE & MOBILE ROBOTICS • 2024 – 2026 (8-PERSON TEAM)",
+              title: "Multifunctional Mobile Robot for Launch-Site Safety (Perseus Project)",
+              org: "CNES-Supported Student Space Association (100h+)",
+              contextTitle: "Context & Engineering Challenge",
+              context: "Enhance ground safety during experimental rocket launch campaigns by deploying a mobile robotic platform capable of remote launch-pad inspection and launcher support operations.",
+              actionsTitle: "Actions & Technical Execution",
+              actions: [
+                "Authored technical specifications and sized the prototype (lightweight aluminum chassis, powertrain & motorization).",
+                "Built complete 3D CAD assemblies and ran stress / Finite Element Analysis (FEA) simulations to validate structural integrity.",
+                "Integrated long-range LoRa telemetry and an active low-latency 360° video piloting system.",
+                "Designed a dedicated launch vehicle take-off support device (2024–2025) within a multidisciplinary engineering team."
+              ],
+              resultsTitle: "Results & Reflexive Takeaway",
+              results: "Delivered a validated, modular rover architecture meeting CNES safety guidelines. Working in an 8-person team sharpened my ability to manage mechatronic trade-offs between sensor field-of-view, mass budget, and structural stiffness.",
+              tools: ["CATIA V5 / SolidWorks", "FEA Stress Analysis", "LoRa Telemetry", "360° Video System", "Aluminum Chassis Sizing"]
+            },
+            {
+              tag: "AEROSPACE MANUFACTURING & CAD • 2024 – 2027",
+              title: "Aerospace Manufacturing Engineering, Quality Control & Structural Optimization",
+              org: "SIGMA Clermont — Graduate School of Mechanical Engineering",
+              contextTitle: "Context & Engineering Challenge",
+              context: "Master the complete lifecycle of aerospace components and automated production cells: from topology lightweighting in CAD to zero-defect process capability on the shop floor.",
+              actionsTitle: "Actions & Technical Execution",
+              actions: [
+                "Design & Lightweighting: Structural joint design (bolted, bonded), composite & plastic processing (thermoforming, injection molding), and topology optimization (ANSYS, Inspire).",
+                "Manufacturing & Quality: Aerospace machining process routing, dimension transfer & tolerances, machining fixture design (DFM/DFA), Process FMEA (AMDEC), DOE, and Statistical Process Control (SPC, Cp, Cpk).",
+                "Industrial Automation: Off-line industrial robot programming (RoboDK), PLC programming (GRAFCET / IEC 61131), and machine safety compliance (ISO 13849)."
+              ],
+              resultsTitle: "Results & Reflexive Takeaway",
+              results: "Developed a dual 'Design Office + Shop Floor' mindset: engineering high-performance parts while ensuring manufacturability, statistical quality control, and operator ergonomics.",
+              tools: ["ANSYS", "Altair Inspire", "CATIA V5", "DFM / DFA", "FMEA & SPC (Cp/Cpk)", "RoboDK", "GRAFCET"]
+            }
+          ]
+        },
+        radar: {
+          title: "Engineering Competency Matrix & Certifications",
+          subtitle: "Click any skill tag to inspect proficiency & applied tools",
+          axes: ["Mechanical CAD", "FEA & Structures", "Testing & Sensors", "Mfg & Quality", "Code & Robotics"],
+          certsTitle: "Certifications & Clearances",
+          certs: [
+            { name: "BIA — Aeronautical Initiation Certificate", detail: "Aerodynamics, flight mechanics, navigation" },
+            { name: "Additive Manufacturing (IMT)", detail: "Industrial 3D printing & DFM constraints" },
+            { name: "INRS Certified", detail: "Industrial workplace safety & risk prevention" },
+            { name: "Driver's License (Permis B)", detail: "Full mobility for industrial sites" }
+          ],
+          langsTitle: "Working Languages",
+          langs: [
+            { lang: "French", level: "Native speaker", pct: 100 },
+            { lang: "English", level: "B2 — Professional Working (Prague R&D & LaTeX thesis)", pct: 82 },
+            { lang: "German", level: "B1 — Intermediate", pct: 55 }
+          ]
+        },
+        cv: {
+          switchFR: "Version Française",
+          switchEN: "English Resume",
+          printBtn: "Print / Save as PDF",
+          note: "Recruiter tip: Click 'Print / Save as PDF' to immediately export a clean standalone PDF copy of this resume."
+        },
+        contact: {
+          title: "Mission Control — Contact & References",
+          subtitle: "Available for a phone call or video interview regarding a 6-month PFE internship (March – Sept 2027).",
+          copyEmail: "Copy School Email",
+          copyGmail: "Copy Gmail",
+          copyPhone: "Copy Phone",
+          openLinkedin: "Open LinkedIn",
+          refTitle: "Academic Reference",
+          refRole: "Professor — SIGMA Clermont (Mechanics & Structures)",
+          quickMsgTitle: "Quick Interview Invitation Generator",
+          companyPlaceholder: "Your Company (e.g. Airbus, Safran, ArianeGroup...)",
+          rolePlaceholder: "Role / Team (e.g. Structural R&D Internship)",
+          sendMailBtn: "Draft Email in Mail Client"
+        },
+        trash: {
+          title: "Backstage, Leadership & Engineering Lessons",
+          subtitle: "Experiences beyond technical coursework that build resilience, teamwork, and adaptability.",
+          items: [
+            {
+              icon: "🌐",
+              title: "Field Operations & Web Dev — Bab'Kasia (Summer 2025)",
+              desc: "2-month commercial role (Pont-à-Mousson): inventory management, order logistics, customer relations, and full creation of the company's website."
+            },
+            {
+              icon: "🎉",
+              title: "Campus Event Operations — FizZteam (2025–2026)",
+              desc: "Organized and coordinated major campus events at SIGMA Clermont. Team coordination, logistics, and real-time problem solving."
+            },
+            {
+              icon: "✈️",
+              title: "Aeronautics Passion & Outdoor Sports",
+              desc: "Active member of specialized aeronautics associations (BIA holder) and regular participant in competitive/associative outdoor sports."
+            },
+            {
+              icon: "🔧",
+              title: "Engineering Lesson: Model vs. Reality Iteration",
+              desc: "Both in Prague's climatic chamber and on the Perseus rover, initial analytical models never match reality 100% on day one. Rigorous testing and iterative refinement bridge the gap."
+            }
+          ]
+        }
+      }
+    };
+
+    // ==========================================
+    // 2. WINDOW DEFINITIONS & INITIAL STATE
+    // ==========================================
+    const appConfigs = [
+      {
+        id: 'profile',
+        icon: `<svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        accent: 'border-sky-400/40 bg-sky-500/10',
+        defaultPos: { top: 28, left: 170, width: 620, height: 470 },
+        isOpen: true,
+        isMinimized: false,
+        isMaximized: false
+      },
+      {
+        id: 'projects',
+        icon: `<svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
+        accent: 'border-amber-400/40 bg-amber-500/10',
+        defaultPos: { top: 55, left: 220, width: 760, height: 540 },
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false
+      },
+      {
+        id: 'radar',
+        icon: `<svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>`,
+        accent: 'border-emerald-400/40 bg-emerald-500/10',
+        defaultPos: { top: 45, left: 260, width: 700, height: 510 },
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false
+      },
+      {
+        id: 'cv',
+        icon: `<svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+        accent: 'border-rose-400/40 bg-rose-500/10',
+        defaultPos: { top: 38, left: 200, width: 740, height: 550 },
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false
+      },
+      {
+        id: 'contact',
+        icon: `<svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+        accent: 'border-purple-400/40 bg-purple-500/10',
+        defaultPos: { top: 70, left: 290, width: 580, height: 480 },
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false
+      },
+      {
+        id: 'trash',
+        icon: `<svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+        accent: 'border-slate-400/40 bg-slate-500/10',
+        defaultPos: { top: 85, left: 240, width: 620, height: 470 },
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false
+      }
+    ];
+
+    let activeProjectTab = 0;
+    let cvLang = 'fr';
+    let selectedSkillFilter = 'ALL';
+
+    // ==========================================
+    // 3. TECHNICAL SVG BLUEPRINTS FOR PROJECTS
+    // ==========================================
+    function getProjectSVG(index) {
+      if (index === 0) {
+        // FBG Optical Fiber Strain & Thermal/Humidity Cross-Sensitivity Schematic
+        return `
+          <div class="bg-slate-950/90 border border-sky-500/25 rounded-xl p-3 my-3">
+            <div class="flex justify-between items-center text-[10px] font-mono text-sky-400 mb-2">
+              <span>FIG 1.1 — FBG SHEAR-LAG & THERMO-HYGRO MODEL (CTU PRAGUE)</span>
+              <span>λ_B = 2·n_eff·Λ</span>
+            </div>
+            <svg viewBox="0 0 500 130" class="w-full h-28">
+              <!-- Substrate -->
+              <rect x="30" y="85" width="440" height="28" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+              <text x="250" y="103" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">SUBSTRATE (Invar / Steel / Copper / Duralumin)</text>
+              <!-- Adhesive Layer -->
+              <rect x="70" y="75" width="360" height="10" fill="#f59e0b" fill-opacity="0.35" stroke="#f59e0b" stroke-width="1"/>
+              <text x="435" y="83" fill="#fbbf24" font-family="JetBrains Mono" font-size="8">Adhesive</text>
+              <!-- Optical Fiber Core -->
+              <rect x="20" y="57" width="460" height="18" rx="9" fill="#0284c7" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1.5"/>
+              <!-- Bragg Grating Lines -->
+              <g stroke="#38bdf8" stroke-width="2">
+                <line x1="190" y1="59" x2="190" y2="73"/><line x1="205" y1="59" x2="205" y2="73"/>
+                <line x1="220" y1="59" x2="220" y2="73"/><line x1="235" y1="59" x2="235" y2="73"/>
+                <line x1="250" y1="59" x2="250" y2="73"/><line x1="265" y1="59" x2="265" y2="73"/>
+                <line x1="280" y1="59" x2="280" y2="73"/><line x1="295" y1="59" x2="295" y2="73"/>
+                <line x1="310" y1="59" x2="310" y2="73"/>
+              </g>
+              <!-- Strain Arrows -->
+              <path d="M10 100 L28 100 M15 95 L10 100 L15 105" stroke="#10b981" stroke-width="2" fill="none"/>
+              <path d="M490 100 L472 100 M485 95 L490 100 L485 105" stroke="#10b981" stroke-width="2" fill="none"/>
+              <text x="250" y="20" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="10">Δλ_B / λ_B = K_ε·ε + K_T·ΔT + K_RH·ΔRH</text>
+              <text x="120" y="42" fill="#f59e0b" font-family="JetBrains Mono" font-size="9">ACS Climatic Chamber (ΔT, ΔRH)</text>
+              <text x="370" y="42" fill="#10b981" font-family="JetBrains Mono" font-size="9">MTS Criterion (ε)</text>
+            </svg>
+          </div>
+        `;
+      } else if (index === 1) {
+        // Perseus Rover Blueprint
+        return `
+          <div class="bg-slate-950/90 border border-amber-500/25 rounded-xl p-3 my-3">
+            <div class="flex justify-between items-center text-[10px] font-mono text-amber-400 mb-2">
+              <span>FIG 2.1 — PERSEUS LAUNCH-SITE ROVER ARCHITECTURE (CNES)</span>
+              <span>TELEMETRY: LoRa + 360° CAM</span>
+            </div>
+            <svg viewBox="0 0 500 130" class="w-full h-28">
+              <!-- Ground line -->
+              <line x1="20" y1="112" x2="480" y2="112" stroke="#475569" stroke-width="1.5" stroke-dasharray="6 3"/>
+              <!-- Chassis -->
+              <rect x="130" y="55" width="220" height="34" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+              <text x="240" y="76" text-anchor="middle" fill="#fcd34d" font-family="JetBrains Mono" font-size="10">ALUMINUM CHASSIS (FEA VALIDATED)</text>
+              <!-- Wheels -->
+              <circle cx="160" cy="96" r="15" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="160" cy="96" r="5" fill="#38bdf8"/>
+              <circle cx="240" cy="96" r="15" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="240" cy="96" r="5" fill="#38bdf8"/>
+              <circle cx="320" cy="96" r="15" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="320" cy="96" r="5" fill="#38bdf8"/>
+              <!-- 360 Camera Mast -->
+              <line x1="185" y1="55" x2="185" y2="26" stroke="#94a3b8" stroke-width="2.5"/>
+              <circle cx="185" cy="22" r="8" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="145" y="18" text-anchor="end" fill="#38bdf8" font-family="JetBrains Mono" font-size="9">360° Low-Latency Video</text>
+              <!-- LoRa Antenna -->
+              <line x1="305" y1="55" x2="305" y2="18" stroke="#10b981" stroke-width="2"/>
+              <path d="M297 22 Q305 12 313 22" stroke="#10b981" fill="none" stroke-width="1.5"/>
+              <text x="322" y="24" fill="#10b981" font-family="JetBrains Mono" font-size="9">LoRa Telemetry Link</text>
+            </svg>
+          </div>
+        `;
+      } else {
+        // SIGMA Topology Optimization & SPC Schematic
+        return `
+          <div class="bg-slate-950/90 border border-emerald-500/25 rounded-xl p-3 my-3">
+            <div class="flex justify-between items-center text-[10px] font-mono text-emerald-400 mb-2">
+              <span>FIG 3.1 — TOPOLOGY OPTIMIZATION & PROCESS CAPABILITY (Cp/Cpk)</span>
+              <span>ANSYS / INSPIRE / DFM</span>
+            </div>
+            <svg viewBox="0 0 500 130" class="w-full h-28">
+              <!-- Left: Topology Bracket -->
+              <g transform="translate(30, 18)">
+                <rect x="0" y="0" width="160" height="90" rx="6" fill="#0f172a" stroke="#334155"/>
+                <path d="M20 75 L20 20 L140 75 Z" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="2"/>
+                <polygon points="38,65 38,42 85,65" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+                <circle cx="24" cy="24" r="4" fill="#f59e0b"/>
+                <circle cx="24" cy="71" r="4" fill="#f59e0b"/>
+                <circle cx="132" cy="71" r="4" fill="#f59e0b"/>
+                <text x="80" y="14" text-anchor="middle" fill="#6ee7b7" font-family="JetBrains Mono" font-size="8">TOPOLOGY LIGHTWEIGHTING</text>
+              </g>
+              <!-- Right: SPC Bell Curve -->
+              <g transform="translate(230, 18)">
+                <rect x="0" y="0" width="240" height="90" rx="6" fill="#0f172a" stroke="#334155"/>
+                <line x1="35" y1="15" x2="35" y2="78" stroke="#f43f5e" stroke-dasharray="3 2"/>
+                <line x1="205" y1="15" x2="205" y2="78" stroke="#f43f5e" stroke-dasharray="3 2"/>
+                <path d="M45 78 Q90 78 105 42 T120 20 T135 42 Q150 78 195 78" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                <text x="120" y="13" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="8">SPC CONTROL (Cp ≥ 1.33 / Cpk)</text>
+                <text x="35" y="86" text-anchor="middle" fill="#fb7185" font-family="JetBrains Mono" font-size="7">LSL</text>
+                <text x="205" y="86" text-anchor="middle" fill="#fb7185" font-family="JetBrains Mono" font-size="7">USL</text>
+              </g>
+            </svg>
+          </div>
+        `;
+      }
+    }
+
+    // ==========================================
+    // 4. APPLICATION CONTENT RENDERERS
+    // ==========================================
+    function renderWindowContent(id) {
+      const t = i18n[currentLang];
+
+      if (id === 'profile') {
+        const p = t.profile;
+        return `
+          <div class="p-4 sm:p-6 space-y-5 selectable-text">
+            <!-- Top Hero Identity Card -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-slate-900/80 border border-sky-500/25 rounded-2xl p-4">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 flex items-center justify-center text-2xl font-mono font-bold text-white shadow-lg shrink-0 border border-sky-300/30">
+                TD
+              </div>
+              <div class="space-y-1 flex-1">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[11px] font-semibold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+                  ${p.badge}
+                </div>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Tom Darsonval</h1>
+                <p class="text-xs sm:text-sm text-sky-300 font-medium">${p.headline}</p>
+                <p class="text-[11px] font-mono text-slate-400">${p.subheadline}</p>
+              </div>
+            </div>
+
+            <!-- Dates & Mobility Banner -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-sky-500/10 border border-sky-500/25 rounded-xl p-3 flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-sky-500/20 text-sky-400 font-mono text-xs font-bold">📅</div>
+                <div>
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">${currentLang === 'fr' ? 'Période de disponibilité' : 'Availability Window'}</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">${p.dates}</div>
+                </div>
+              </div>
+              <div class="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-3 flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold">📍</div>
+                <div>
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">${currentLang === 'fr' ? 'Localisation & Mobilité' : 'Location & Mobility'}</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">France & Europe • Permis B • FR / EN (B2) / DE (B1)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Summary -->
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-800">
+              ${p.pitch}
+            </p>
+
+            <!-- Target Sectors -->
+            <div>
+              <div class="text-[11px] font-mono text-slate-400 uppercase mb-2">${p.sectorsTitle}</div>
+              <div class="flex flex-wrap gap-2">
+                ${p.sectors.map(s => `<span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-sky-400/25 text-sky-200 text-xs font-medium">${s}</span>`).join('')}
+              </div>
+            </div>
+
+            <!-- Quick CTA Buttons -->
+            <div class="pt-2 flex flex-wrap gap-2.5">
+              <button onclick="openApp('projects')" class="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition flex items-center gap-2 shadow-lg shadow-sky-500/20">
+                <span>📁</span> ${p.btnProjects}
+              </button>
+              <button onclick="openApp('cv')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-semibold text-xs transition flex items-center gap-2">
+                <span>📄</span> ${p.btnCV}
+              </button>
+              <button onclick="copyText('tom.darsonval@sigma-clermont.fr', '${currentLang === 'fr' ? 'Email copié dans le presse-papier !' : 'Email copied to clipboard!'}')" class="px-4 py-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-700 border border-sky-500/30 text-sky-300 font-mono text-xs transition flex items-center gap-2">
+                <span>📋</span> ${p.btnCopy}
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (id === 'projects') {
+        const pr = t.projects;
+        const activeCase = pr.cases[activeProjectTab];
+        return `
+          <div class="p-4 sm:p-5 space-y-4 selectable-text">
+            <div class="text-xs text-slate-400 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
+              ${pr.intro}
+            </div>
+
+            <!-- Project Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+              ${pr.tabs.map((tab, idx) => `
+                <button onclick="selectProjectTab(${idx})" class="px-3 py-2 rounded-xl text-xs font-mono transition ${activeProjectTab === idx ? 'bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/20' : 'bg-slate-900/90 text-slate-300 hover:bg-slate-800 border border-slate-700/70'}">
+                  ${tab}
+                </button>
+              `).join('')}
+            </div>
+
+            <!-- Active Case Study Content -->
+            <div class="space-y-4">
+              <div>
+                <span class="inline-block text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 mb-1.5">
+                  ${activeCase.tag}
+                </span>
+                <h2 class="text-lg sm:text-xl font-bold text-white">${activeCase.title}</h2>
+                <p class="text-xs font-mono text-sky-400 mt-0.5">${activeCase.org}</p>
+              </div>
+
+              <!-- Interactive Technical Blueprint SVG -->
+              ${getProjectSVG(activeProjectTab)}
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="bg-slate-900/75 border border-slate-800 rounded-xl p-3.5">
+                  <h3 class="text-xs font-mono uppercase text-sky-400 font-semibold mb-1.5">01 // ${activeCase.contextTitle}</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">${activeCase.context}</p>
+                </div>
+                <div class="bg-slate-900/75 border border-emerald-500/25 rounded-xl p-3.5">
+                  <h3 class="text-xs font-mono uppercase text-emerald-400 font-semibold mb-1.5">03 // ${activeCase.resultsTitle}</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">${activeCase.results}</p>
+                </div>
+              </div>
+
+              <div class="bg-slate-900/75 border border-slate-800 rounded-xl p-3.5">
+                <h3 class="text-xs font-mono uppercase text-amber-400 font-semibold mb-2">02 // ${activeCase.actionsTitle}</h3>
+                <ul class="space-y-1.5 text-xs text-slate-300">
+                  ${activeCase.actions.map(act => `
+                    <li class="flex items-start gap-2">
+                      <span class="text-amber-400 font-mono mt-0.5">▸</span>
+                      <span>${act}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                ${activeCase.tools.map(tool => `<span class="px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/30 text-sky-300 font-mono text-[11px]">${tool}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (id === 'radar') {
+        const r = t.radar;
+        const skillGroups = [
+          { cat: 'CAD', label: 'CATIA V5', lvl: 'Avancé / Advanced' },
+          { cat: 'CAD', label: 'SolidWorks', lvl: 'Avancé / Advanced' },
+          { cat: 'CAD', label: 'Fusion 360', lvl: 'Maîtrisé / Proficient' },
+          { cat: 'FEA', label: 'ANSYS (FEA & Topology)', lvl: 'Avancé / Advanced' },
+          { cat: 'FEA', label: 'Altair Inspire', lvl: 'Maîtrisé / Proficient' },
+          { cat: 'TEST', label: 'Capteurs FBG & Chaînes de mesure', lvl: 'Recherche / R&D' },
+          { cat: 'TEST', label: 'Banc MTS Criterion & Enceinte ACS', lvl: 'Expérimental / Lab' },
+          { cat: 'INDUS', label: 'Gammes d’usinage & DFM/DFA', lvl: 'Aéronautique / Aero' },
+          { cat: 'INDUS', label: 'AMDEC Process & MSP (Cp/Cpk)', lvl: 'Qualité / Quality' },
+          { cat: 'CODE', label: 'Python & MATLAB', lvl: 'Analyse & Modélisation' },
+          { cat: 'CODE', label: 'LaTeX', lvl: 'Rédaction Scientifique' },
+          { cat: 'CODE', label: 'RoboDK & GRAFCET (IEC 61131)', lvl: 'Robotique & Automatisme' }
+        ];
+
+        const filteredSkills = selectedSkillFilter === 'ALL'
+          ? skillGroups
+          : skillGroups.filter(s => s.cat === selectedSkillFilter);
+
+        return `
+          <div class="p-4 sm:p-5 space-y-5 selectable-text">
+            <div>
+              <h2 class="text-lg font-bold text-white">${r.title}</h2>
+              <p class="text-xs text-slate-400">${r.subtitle}</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+              <!-- 5-Axis Competency Radar SVG -->
+              <div class="bg-slate-950/90 border border-emerald-500/25 rounded-2xl p-4 flex flex-col items-center">
+                <div class="text-[10px] font-mono text-emerald-400 mb-1">APC COMPETENCY RADAR — SIGMA CLERMONT</div>
+                <svg viewBox="0 0 300 260" class="w-full max-w-[270px] h-auto">
+                  <!-- Pentagon Grid Webs -->
+                  <polygon points="150,30 255,106 215,230 85,230 45,106" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  <polygon points="150,55 229,112 199,205 101,205 71,112" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  <polygon points="150,80 202,118 182,180 118,180 98,118" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  <polygon points="150,105 176,124 166,155 134,155 124,124" fill="none" stroke="#1e293b" stroke-width="1"/>
+                  <!-- Axes -->
+                  <line x1="150" y1="130" x2="150" y2="30" stroke="#334155" stroke-width="1"/>
+                  <line x1="150" y1="130" x2="255" y2="106" stroke="#334155" stroke-width="1"/>
+                  <line x1="150" y1="130" x2="215" y2="230" stroke="#334155" stroke-width="1"/>
+                  <line x1="150" y1="130" x2="85" y2="230" stroke="#334155" stroke-width="1"/>
+                  <line x1="150" y1="130" x2="45" y2="106" stroke="#334155" stroke-width="1"/>
+                  <!-- Data Polygon -->
+                  <polygon points="150,42 242,110 206,216 94,216 58,110" fill="rgba(16, 185, 129, 0.24)" stroke="#10b981" stroke-width="2.5"/>
+                  <!-- Data Points -->
+                  <circle cx="150" cy="42" r="4" fill="#38bdf8"/>
+                  <circle cx="242" cy="110" r="4" fill="#38bdf8"/>
+                  <circle cx="206" cy="216" r="4" fill="#38bdf8"/>
+                  <circle cx="94" cy="216" r="4" fill="#38bdf8"/>
+                  <circle cx="58" cy="110" r="4" fill="#38bdf8"/>
+                  <!-- Labels -->
+                  <text x="150" y="18" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9.5">${r.axes[0]}</text>
+                  <text x="260" y="102" text-anchor="start" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9.5">${r.axes[1]}</text>
+                  <text x="220" y="246" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9.5">${r.axes[2]}</text>
+                  <text x="80" y="246" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9.5">${r.axes[3]}</text>
+                  <text x="40" y="102" text-anchor="end" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9.5">${r.axes[4]}</text>
+                </svg>
+              </div>
+
+              <!-- Filterable Skill Matrix -->
+              <div class="space-y-3">
+                <div class="flex flex-wrap gap-1.5">
+                  ${['ALL', 'CAD', 'FEA', 'TEST', 'INDUS', 'CODE'].map(cat => `
+                    <button onclick="setSkillFilter('${cat}')" class="px-2.5 py-1 rounded-lg font-mono text-[10px] transition ${selectedSkillFilter === cat ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
+                      ${cat}
+                    </button>
+                  `).join('')}
+                </div>
+                <div class="space-y-1.5 max-h-52 overflow-y-auto os-scroll pr-1">
+                  ${filteredSkills.map(sk => `
+                    <div class="flex items-center justify-between bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs">
+                      <span class="font-medium text-white">${sk.label}</span>
+                      <span class="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">${sk.lvl}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Certifications & Languages -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-slate-900/75 border border-slate-800 rounded-xl p-3.5 space-y-2">
+                <h3 class="text-xs font-mono uppercase text-amber-400 font-semibold">${r.certsTitle}</h3>
+                ${r.certs.map(c => `
+                  <div class="border-l-2 border-amber-400/60 pl-2.5 py-0.5">
+                    <div class="text-xs font-semibold text-white">${c.name}</div>
+                    <div class="text-[11px] text-slate-400">${c.detail}</div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="bg-slate-900/75 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                <h3 class="text-xs font-mono uppercase text-sky-400 font-semibold">${r.langsTitle}</h3>
+                ${r.langs.map(l => `
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="font-semibold text-white">${l.lang}</span>
+                      <span class="text-slate-400 font-mono text-[11px]">${l.level}</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                      <div class="h-full bg-sky-400 rounded-full" style="width: ${l.pct}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (id === 'cv') {
+        const c = t.cv;
+        return `
+          <div class="p-4 sm:p-5 space-y-4 selectable-text">
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 p-2.5 rounded-xl">
+              <div class="flex gap-1.5">
+                <button onclick="setCvLang('fr')" class="px-3 py-1.5 rounded-lg text-xs font-mono transition ${cvLang === 'fr' ? 'bg-sky-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-300'}">
+                  🇫🇷 ${c.switchFR}
+                </button>
+                <button onclick="setCvLang('en')" class="px-3 py-1.5 rounded-lg text-xs font-mono transition ${cvLang === 'en' ? 'bg-sky-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-300'}">
+                  🇬🇧 ${c.switchEN}
+                </button>
+              </div>
+              <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition flex items-center gap-1.5">
+                <span>🖨️</span> ${c.printBtn}
+              </button>
+            </div>
+
+            <!-- Printable Resume Paper Sheet -->
+            <div id="printable-cv" class="bg-white text-slate-900 rounded-xl p-6 sm:p-8 shadow-2xl space-y-5 text-xs leading-relaxed">
+              <div class="border-b-2 border-slate-900 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div>
+                  <h1 class="text-2xl font-bold tracking-tight text-slate-950">TOM DARSONVAL</h1>
+                  <p class="text-sm font-semibold text-sky-700">
+                    ${cvLang === 'fr'
+                      ? "Élève-Ingénieur Mécanique & Robotique — Recherche Stage PFE (6 mois : Mars – Sept 2027)"
+                      : "Mechanical Engineering Student | Aerospace Structures, Instrumentation & FEA"}
+                  </p>
+                </div>
+                <div class="text-left sm:text-right font-mono text-[11px] text-slate-700">
+                  <div>+33 6 13 47 77 85</div>
+                  <div>tom.darsonval@sigma-clermont.fr</div>
+                  <div>linkedin.com/in/tom-darsonval-491250333</div>
+                </div>
+              </div>
+
+              <!-- Objective -->
+              <div>
+                <h2 class="font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+                  ${cvLang === 'fr' ? "Objectif Professionnel" : "Professional Summary"}
+                </h2>
+                <p class="text-slate-700">
+                  ${cvLang === 'fr'
+                    ? "Recherche un stage de fin d'études (PFE) d'une durée de 6 mois entre le 15 mars et le 25 septembre 2027 dans les secteurs de l'aéronautique, du spatial ou de la robotique de pointe (R&D mécanique, structures, industrialisation, instrumentation)."
+                    : "Seeking a 6-month graduation internship in mechanical engineering between March 15, 2027 and September 25, 2027 in Aeronautics, Space, or Advanced Robotics (Structural R&D, FEA, Manufacturing, Instrumentation)."}
+                </p>
+              </div>
+
+              <!-- Experience & Projects -->
+              <div>
+                <h2 class="font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+                  ${cvLang === 'fr' ? "Expériences & Projets d'Ingénierie" : "Research Experience & Aerospace Projects"}
+                </h2>
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between font-bold text-slate-900">
+                      <span>${cvLang === 'fr' ? "Stage Recherche — Capteurs Optiques FBG | CTU Prague (Dép. Aérospatial)" : "Research Intern — FBG Optical Sensors | CTU in Prague (Aerospace Dept.)"}</span>
+                      <span class="font-mono text-[11px]">2026 (4 mois / 530h)</span>
+                    </div>
+                    <ul class="list-disc pl-4 text-slate-700 mt-1 space-y-0.5">
+                      <li>${cvLang === 'fr' ? "Modélisation analytique des sensibilités croisées température / humidité et transfert de déformation (shear-lag) sur 6 substrats (Invar, acier, cuivre, duralumin)." : "Formulated analytical models for temperature/humidity cross-sensitivities and shear-lag strain-transfer across 6 substrates (Invar, steel, copper, duralumin)."}</li>
+                      <li>${cvLang === 'fr' ? "Conception de protocoles expérimentaux sur enceinte climatique ACS et banc de traction MTS Criterion ; traitement sous Python / MATLAB et rapport en LaTeX." : "Conducted experimental campaigns combining an ACS climatic chamber and MTS Criterion tensile bench; processed data with Python/MATLAB and wrote technical report in LaTeX."}</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between font-bold text-slate-900">
+                      <span>${cvLang === 'fr' ? "Projet Spatial Perseus (Soutenu par le CNES) — Concepteur Systèmes Mécaniques" : "Perseus Space Project (CNES-Supported) — Mechanical Systems Designer"}</span>
+                      <span class="font-mono text-[11px]">2024 – 2026 (100h)</span>
+                    </div>
+                    <ul class="list-disc pl-4 text-slate-700 mt-1 space-y-0.5">
+                      <li>${cvLang === 'fr' ? "Robot mobile multifonction de sécurité sur pas de tir : cahier des charges, dimensionnement châssis aluminium, motorisation, simulations FEA, CAO 3D, télémétrie LoRa et vidéo 360°." : "Multifunctional mobile robot for launch-site safety: technical specification, aluminum chassis & powertrain sizing, FEA stress simulations, 3D CAD, LoRa telemetry & 360° low-latency video."}</li>
+                      <li>${cvLang === 'fr' ? "Conception en équipe d'un dispositif de support au décollage pour lanceur (2024-2025)." : "Designed a dedicated launch vehicle take-off support device within a multidisciplinary team (2024-2025)."}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Education -->
+              <div>
+                <h2 class="font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+                  ${cvLang === 'fr' ? "Formation" : "Education"}
+                </h2>
+                <div class="space-y-1.5 text-slate-700">
+                  <div class="flex justify-between">
+                    <span class="font-bold text-slate-900">SIGMA Clermont — Diplôme d'Ingénieur en Génie Mécanique (Filière MRS)</span>
+                    <span class="font-mono text-[11px]">2024 – 2027</span>
+                  </div>
+                  <p>${cvLang === 'fr' ? "CAO/FEA, procédés de fabrication aéronautique, DFM/DFA, AMDEC, MSP (Cp/Cpk), matériaux composites, optimisation topologique (ANSYS/Inspire), robotique (RoboDK)." : "Aerospace manufacturing & quality (DFM/DFA, FMEA, SPC Cp/Cpk), composite materials, topology optimization (ANSYS/Inspire), industrial robotics (RoboDK)."}</p>
+                  <div class="flex justify-between pt-1">
+                    <span class="font-bold text-slate-900">Lycée Henri Loritz (Nancy) — CPGE PTSI / PT*</span>
+                    <span class="font-mono text-[11px]">2022 – 2024</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skills & Certifications -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <h3 class="font-bold uppercase text-slate-900 border-b border-slate-300 pb-1 mb-1">
+                    ${cvLang === 'fr' ? "Compétences Techniques" : "Technical Skills"}
+                  </h3>
+                  <p class="text-slate-700">CATIA V5, SolidWorks, Fusion 360, ANSYS, Inspire, Python, MATLAB, LaTeX, RoboDK, GRAFCET.</p>
+                </div>
+                <div>
+                  <h3 class="font-bold uppercase text-slate-900 border-b border-slate-300 pb-1 mb-1">
+                    ${cvLang === 'fr' ? "Certifications & Langues" : "Certifications & Languages"}
+                  </h3>
+                  <p class="text-slate-700">BIA, Fabrication Additive (IMT), Certifié INRS, Permis B | Français (natif), Anglais (B2), Allemand (B1).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (id === 'contact') {
+        const ct = t.contact;
+        return `
+          <div class="p-4 sm:p-5 space-y-4 selectable-text">
+            <div>
+              <h2 class="text-lg font-bold text-white">${ct.title}</h2>
+              <p class="text-xs text-slate-400">${ct.subtitle}</p>
+            </div>
+
+            <!-- Direct Action Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button onclick="copyText('tom.darsonval@sigma-clermont.fr', 'Email SIGMA copié !')" class="bg-slate-900/80 hover:bg-slate-800 border border-sky-500/30 p-3.5 rounded-xl text-left transition group">
+                <div class="text-[10px] font-mono text-sky-400">EMAIL ACADÉMIQUE</div>
+                <div class="text-xs font-semibold text-white mt-0.5 truncate">tom.darsonval@sigma-clermont.fr</div>
+                <div class="text-[10px] text-slate-400 mt-1 group-hover:text-sky-300">📋 ${ct.copyEmail}</div>
+              </button>
+
+              <button onclick="copyText('+33 6 13 47 77 85', 'Numéro de téléphone copié !')" class="bg-slate-900/80 hover:bg-slate-800 border border-emerald-500/30 p-3.5 rounded-xl text-left transition group">
+                <div class="text-[10px] font-mono text-emerald-400">TÉLÉPHONE DIRECT</div>
+                <div class="text-xs font-semibold text-white mt-0.5">+33 6 13 47 77 85</div>
+                <div class="text-[10px] text-slate-400 mt-1 group-hover:text-emerald-300">📋 ${ct.copyPhone}</div>
+              </button>
+
+              <button onclick="copyText('tomdarsonval@gmail.com', 'Gmail copié !')" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-700 p-3.5 rounded-xl text-left transition group">
+                <div class="text-[10px] font-mono text-slate-400">EMAIL PERSONNEL</div>
+                <div class="text-xs font-semibold text-white mt-0.5">tomdarsonval@gmail.com</div>
+                <div class="text-[10px] text-slate-400 mt-1 group-hover:text-white">📋 ${ct.copyGmail}</div>
+              </button>
+
+              <a href="https://www.linkedin.com/in/tom-darsonval-491250333/" target="_blank" rel="noopener noreferrer" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-400/40 p-3.5 rounded-xl text-left transition block">
+                <div class="text-[10px] font-mono text-blue-300">RÉSEAU PROFESSIONNEL</div>
+                <div class="text-xs font-semibold text-white mt-0.5">LinkedIn — Tom Darsonval</div>
+                <div class="text-[10px] text-blue-300 mt-1">↗ ${ct.openLinkedin}</div>
+              </a>
+            </div>
+
+            <!-- Academic Reference -->
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5">
+              <div class="text-[10px] font-mono uppercase text-amber-400 font-bold">${ct.refTitle}</div>
+              <div class="text-sm font-semibold text-white mt-0.5">Prof. Xavier Balandraud</div>
+              <div class="text-xs text-slate-300">${ct.refRole}</div>
+              <button onclick="copyText('xavier.balandraud@sigma-clermont.fr', 'Email du Prof. Balandraud copié !')" class="mt-1.5 text-[11px] font-mono text-amber-300 hover:underline">
+                📋 xavier.balandraud@sigma-clermont.fr
+              </button>
+            </div>
+
+            <!-- Recruiter Quick Draft Generator -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+              <div class="text-xs font-mono text-sky-400 font-semibold">⚡ ${ct.quickMsgTitle}</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input id="recruiter-company" type="text" placeholder="${ct.companyPlaceholder}" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-400" />
+                <input id="recruiter-role" type="text" placeholder="${ct.rolePlaceholder}" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-400" />
+              </div>
+              <button onclick="launchMailDraft()" class="w-full py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition">
+                ✉️ ${ct.sendMailBtn}
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (id === 'trash') {
+        const tr = t.trash;
+        return `
+          <div class="p-4 sm:p-5 space-y-4 selectable-text">
+            <div>
+              <h2 class="text-lg font-bold text-white">${tr.title}</h2>
+              <p class="text-xs text-slate-400">${tr.subtitle}</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              ${tr.items.map(item => `
+                <div class="bg-slate-900/80 border border-slate-800 hover:border-sky-500/30 rounded-xl p-3.5 transition space-y-1.5">
+                  <div class="text-xl">${item.icon}</div>
+                  <h3 class="text-xs sm:text-sm font-semibold text-white">${item.title}</h3>
+                  <p class="text-xs text-slate-300 leading-relaxed">${item.desc}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ==========================================
+    // 5. DESKTOP & WINDOW ENGINE
+    // ==========================================
+    function renderDesktop() {
+      const t = i18n[currentLang];
+      const iconsContainer = document.getElementById('desktop-icons-container');
+      const dockContainer = document.getElementById('os-dock');
+      const startItems = document.getElementById('start-menu-items');
+
+      iconsContainer.innerHTML = '';
+      dockContainer.innerHTML = '';
+      startItems.innerHTML = '';
+
+      appConfigs.forEach(app => {
+        const appMeta = t.apps[app.id];
+
+        // 1. Desktop Icon
+        const iconEl = document.createElement('button');
+        iconEl.className = 'desktop-icon flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/5 transition text-center group focus:outline-none';
+        iconEl.onclick = () => openApp(app.id);
+        iconEl.innerHTML = `
+          <div class="icon-box w-14 h-14 sm:w-12 sm:h-12 rounded-2xl glass-panel ${app.accent} flex items-center justify-center transition-all duration-200">
+            ${app.icon}
+          </div>
+          <span class="text-[11px] font-medium text-slate-200 group-hover:text-white leading-tight drop-shadow">
+            ${appMeta.label}
+          </span>
+        `;
+        iconsContainer.appendChild(iconEl);
+
+        // 2. Bottom Dock Icon
+        const dockBtn = document.createElement('button');
+        dockBtn.className = `relative p-2.5 rounded-xl transition-all duration-200 hover:-translate-y-1.5 ${app.isOpen && !app.isMinimized ? 'bg-sky-500/20 border border-sky-400/40' : 'hover:bg-white/10'}`;
+        dockBtn.title = appMeta.title;
+        dockBtn.onclick = () => toggleDockApp(app.id);
+        dockBtn.innerHTML = `
+          ${app.icon}
+          ${app.isOpen ? `<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${app.isMinimized ? 'bg-slate-400' : 'bg-sky-400'}"></span>` : ''}
+        `;
+        dockContainer.appendChild(dockBtn);
+
+        // 3. Start Menu Item
+        const startBtn = document.createElement('button');
+        startBtn.className = 'w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-sky-500/15 text-left transition text-slate-200 hover:text-white';
+        startBtn.onclick = () => {
+          openApp(app.id);
+          toggleStartMenu(false);
+        };
+        startBtn.innerHTML = `
+          <span class="scale-75">${app.icon}</span>
+          <span class="font-mono text-[11px]">${appMeta.title}</span>
+        `;
+        startItems.appendChild(startBtn);
+      });
+
+      renderWindows();
+    }
+
+    function renderWindows() {
+      const container = document.getElementById('windows-container');
+      const t = i18n[currentLang];
+      const isMobile = window.innerWidth < 768;
+
+      container.innerHTML = '';
+
+      appConfigs.forEach(app => {
+        if (!app.isOpen) return;
+
+        const appMeta = t.apps[app.id];
+        const win = document.createElement('div');
+        win.id = `win-${app.id}`;
+        win.style.zIndex = app.zIndex || 50;
+
+        if (isMobile) {
+          win.className = `os-window fixed inset-x-2 top-11 bottom-20 glass-panel rounded-2xl flex flex-col overflow-hidden pointer-events-auto ${app.isMinimized ? 'minimized' : ''}`;
+        } else {
+          win.style.top = `${app.defaultPos.top}px`;
+          win.style.left = `${app.defaultPos.left}px`;
+          win.style.width = `${app.defaultPos.width}px`;
+          win.style.height = `${app.defaultPos.height}px`;
+          win.className = `os-window absolute glass-panel rounded-2xl flex flex-col overflow-hidden pointer-events-auto ${app.isMinimized ? 'minimized' : ''} ${app.isMaximized ? 'maximized' : ''}`;
+        }
+
+        win.onmousedown = () => focusWindow(app.id);
+
+        win.innerHTML = `
+          <!-- Window Title Bar -->
+          <div class="win-header h-10 bg-slate-900/90 border-b border-slate-700/70 px-3.5 flex items-center justify-between cursor-move shrink-0">
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5 mr-2">
+                <button onclick="closeApp('${app.id}')" title="Fermer" class="w-3 h-3 rounded-full bg-rose-500 hover:bg-rose-400 transition"></button>
+                <button onclick="minimizeApp('${app.id}')" title="Réduire" class="w-3 h-3 rounded-full bg-amber-400 hover:bg-amber-300 transition"></button>
+                <button onclick="maximizeApp('${app.id}')" title="Agrandir" class="hidden sm:inline-block w-3 h-3 rounded-full bg-emerald-500 hover:bg-emerald-400 transition"></button>
+              </div>
+              <span class="font-mono text-xs text-slate-200 font-medium truncate">${appMeta.title}</span>
+            </div>
+            <button onclick="closeApp('${app.id}')" class="sm:hidden text-xs font-mono text-slate-400 hover:text-white px-2 py-1">✕</button>
+          </div>
+
+          <!-- Window Body -->
+          <div class="flex-1 overflow-y-auto os-scroll">
+            ${renderWindowContent(app.id)}
+          </div>
+        `;
+
+        container.appendChild(win);
+        if (!isMobile) {
+          makeDraggable(win, app);
+        }
+      });
+    }
+
+    // ==========================================
+    // 6. INTERACTION & WINDOW CONTROLS
+    // ==========================================
+    function openApp(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (!app) return;
+      // On mobile, close other windows to keep screen clean
+      if (window.innerWidth < 768) {
+        appConfigs.forEach(a => { if (a.id !== id) a.isOpen = false; });
+      }
+      app.isOpen = true;
+      app.isMinimized = false;
+      app.zIndex = ++highestZ;
+      renderDesktop();
+    }
+
+    function closeApp(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (app) {
+        app.isOpen = false;
+        app.isMaximized = false;
+        renderDesktop();
+      }
+    }
+
+    function minimizeApp(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (app) {
+        app.isMinimized = true;
+        renderDesktop();
+      }
+    }
+
+    function maximizeApp(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (app) {
+        app.isMaximized = !app.isMaximized;
+        app.zIndex = ++highestZ;
+        renderWindows();
+      }
+    }
+
+    function toggleDockApp(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (!app) return;
+      if (!app.isOpen) {
+        openApp(id);
+      } else if (app.isMinimized) {
+        app.isMinimized = false;
+        app.zIndex = ++highestZ;
+        renderDesktop();
+      } else {
+        minimizeApp(id);
+      }
+    }
+
+    function focusWindow(id) {
+      const app = appConfigs.find(a => a.id === id);
+      if (app && app.zIndex !== highestZ) {
+        app.zIndex = ++highestZ;
+        const winEl = document.getElementById(`win-${id}`);
+        if (winEl) winEl.style.zIndex = app.zIndex;
+      }
+    }
+
+    function makeDraggable(winEl, app) {
+      const header = winEl.querySelector('.win-header');
+      let isDragging = false;
+      let startX, startY, origLeft, origTop;
+
+      header.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'BUTTON' || app.isMaximized) return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        origLeft = winEl.offsetLeft;
+        origTop = winEl.offsetTop;
+        focusWindow(app.id);
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const newLeft = Math.max(0, Math.min(window.innerWidth - 150, origLeft + dx));
+        const newTop = Math.max(0, Math.min(window.innerHeight - 120, origTop + dy));
+        winEl.style.left = `${newLeft}px`;
+        winEl.style.top = `${newTop}px`;
+        app.defaultPos.left = newLeft;
+        app.defaultPos.top = newTop;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    }
+
+    // ==========================================
+    // 7. APP-SPECIFIC ACTIONS & UTILITIES
+    // ==========================================
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.getElementById('btn-lang-fr').className = lang === 'fr'
+        ? 'px-2 py-0.5 rounded-md bg-sky-500 text-slate-950 font-bold transition'
+        : 'px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition';
+      document.getElementById('btn-lang-en').className = lang === 'en'
+        ? 'px-2 py-0.5 rounded-md bg-sky-500 text-slate-950 font-bold transition'
+        : 'px-2 py-0.5 rounded-md text-slate-400 hover:text-white transition';
+
+      document.querySelector('[data-i18n="statusBadge"]').textContent = i18n[lang].statusBadge;
+      document.querySelector('[data-i18n="roleShort"]').textContent = i18n[lang].roleShort;
+      renderDesktop();
+    }
+
+    function selectProjectTab(idx) {
+      activeProjectTab = idx;
+      renderWindows();
+    }
+
+    function setSkillFilter(cat) {
+      selectedSkillFilter = cat;
+      renderWindows();
+    }
+
+    function setCvLang(lang) {
+      cvLang = lang;
+      renderWindows();
+    }
+
+    function toggleStartMenu(forceState) {
+      const menu = document.getElementById('start-menu');
+      if (typeof forceState === 'boolean') {
+        menu.classList.toggle('hidden', !forceState);
+      } else {
+        menu.classList.toggle('hidden');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('os-toast');
+      document.getElementById('os-toast-msg').textContent = msg;
+      toast.classList.remove('translate-x-full', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-x-full', 'opacity-0');
+      }, 2800);
+    }
+
+    function copyText(text, successMsg) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        showToast(text);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function launchMailDraft() {
+      const company = document.getElementById('recruiter-company')?.value || 'Votre Entreprise';
+      const role = document.getElementById('recruiter-role')?.value || 'Stage PFE Ingénieur Mécanique (Mars 2027)';
+      const subject = encodeURIComponent(`[Stage PFE 2027] Échange avec Tom Darsonval — ${company}`);
+      const body = encodeURIComponent(
+        currentLang === 'fr'
+          ? `Bonjour Tom,\n\nNous avons consulté votre portfolio AeroMech OS et votre profil SIGMA Clermont / CTU Prague a retenu notre attention pour une opportunité (${role}) au sein de ${company}.\n\nSeriez-vous disponible pour un premier échange téléphonique ?\n\nCordialement,`
+          : `Hello Tom,\n\nWe reviewed your AeroMech OS portfolio and your background at SIGMA Clermont / CTU Prague caught our attention for an opportunity (${role}) at ${company}.\n\nWould you be available for an introductory call?\n\nBest regards,`
+      );
+      window.location.href = `mailto:tom.darsonval@sigma-clermont.fr?subject=${subject}&body=${body}`;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('os-clock').textContent = `${hrs}:${mins} CET`;
+    }
+
+    // Close start menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('start-menu');
+      if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !e.target.closest('header')) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      renderWindows();
+    });
+
+    // Initialize OS
+    window.onload = () => {
+      updateClock();
+      setInterval(updateClock, 15000);
+      renderDesktop();
+    };
+  </script>
+</body>
+</html>
