@@ -523,7 +523,6 @@
       gap: 6px;
     }
 
-    /* Galerie multi-photos par projet */
     .project-gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -701,12 +700,12 @@
           "✈️ Projet de pseudo-satellite solaire (HAPS)"
         ],
         icons: {
+          trash: "🗑️ Coulisses",
           welcome: "👨‍🚀 Accueil_PFE.txt",
           projects: "📁 Cursus & Projets",
           skills: "📡 Compétences",
           cv: "📄 CV_2027.pdf",
-          contact: "✉️ Contact & Réf",
-          trash: "🗑️ Coulisses"
+          contact: "✉️ Contact & Réf"
         },
         tabs: ["📋 Vue d'ensemble", "📐 Calculs & Modèles", "🔬 Prototypage & Bilan"],
         projects: [
@@ -714,7 +713,7 @@
             tag: "Aéronautique Stratosphérique • Projet 3A SIGMA Clermont (2026–2027)",
             title: "Conception d'un Pseudo-Satellite Solaire Haute Altitude (HAPS)",
             images: [
-              { src: "projet-haps.png", caption: "Architecture structurale & bilan énergétique du pseudo-satellite solaire (HAPS)" }
+              { src: "projet-haps.jpg", caption: "Architecture structurale & bilan énergétique du pseudo-satellite solaire (HAPS)" }
             ],
             kpis: [
               { val: "Vol persistant", lbl: "Autonomie solaire jour/nuit" },
@@ -816,6 +815,29 @@
               "Automatisation & Robotique industrielle : programmation hors-ligne de cellules robotisées sous RoboDK et programmation d'automates programmables (IEC 61131 / GRAFCET).",
               "Sécurité & Ergonomie atelier : conception de postes de travail et mise en conformité sécurité machines selon la norme ISO 13849."
             ]
+          },
+          {
+            tag: "Expérience Terrain & Relation Client • Bab'Kasia (Été 2025)",
+            title: "Vente, gestion opérationnelle & création de site web",
+            images: [],
+            kpis: [
+              { val: "2 mois", lbl: "Pont-à-Mousson (2025)" },
+              { val: "Site Web", lbl: "Conception & mise en ligne" },
+              { val: "Terrain", lbl: "Stocks & Relation client" }
+            ],
+            overview: {
+              context: "Immersion estivale de deux mois en environnement commercial chez Bab'Kasia (Pont-à-Mousson) : découverte du fonctionnement opérationnel d'une entreprise et contact direct avec la clientèle.",
+              tools: "Outils de création web, Gestion des stocks & logistique de commandes, Relation client.",
+              impact: "Développement de la polyvalence, de l'esprit d'équipe en environnement rythmé et d'une compréhension concrète des attentes utilisateurs/clients."
+            },
+            models: [
+              "Gestion opérationnelle : réception des commandes fournisseurs, contrôle, gestion des stocks et suivi des livraisons clients.",
+              "Digitalisation : conception et mise en ligne du site internet vitrine de la boutique."
+            ],
+            proto: [
+              "Accueil, conseil personnalisé et vente directe en magasin.",
+              "Bilan réflexif : une expérience terrain complémentaire à la formation d'ingénieur, renforçant l'écoute client et la réactivité opérationnelle."
+            ]
           }
         ]
       },
@@ -836,12 +858,12 @@
           "✈️ Solar Pseudo-Satellite Project (HAPS)"
         ],
         icons: {
+          trash: "🗑️ Behind_Scenes",
           welcome: "👨‍🚀 Welcome_PFE.txt",
           projects: "📁 Curriculum & Projects",
           skills: "📡 Skills_Matrix",
           cv: "📄 Resume_2027.pdf",
-          contact: "✉️ Contact & Ref",
-          trash: "🗑️ Behind_Scenes"
+          contact: "✉️ Contact & Ref"
         },
         tabs: ["📋 Overview", "📐 Models & Calculations", "🔬 Prototyping & Review"],
         projects: [
@@ -907,7 +929,6 @@
               { src: "Perseus 2.png", caption: "Full 3D CAD assembly of the 6×6 Rocker-Bogie rover (3DEXPERIENCE)" },
               { src: "Perseus 1.png", caption: "Assembled physical prototype during workshop obstacle-climbing tests" }
             ],
-          
             kpis: [
               { val: "672 W / 14.8 Nm", lbl: "4× Brushless NEMA23" },
               { val: "19.14 MPa", lbl: "Von Mises Al 5754" },
@@ -952,6 +973,29 @@
               "Industrial Automation & Robotics: off-line robotic cell programming in RoboDK and PLC programming (IEC 61131 / GRAFCET).",
               "Shop-Floor Safety & Ergonomics: workstation design and machine safety compliance per ISO 13849."
             ]
+          },
+          {
+            tag: "Field & Customer Experience • Bab'Kasia (Summer 2025)",
+            title: "Sales, Operations Management & Website Creation",
+            images: [],
+            kpis: [
+              { val: "2 Months", lbl: "Pont-à-Mousson (2025)" },
+              { val: "Website", lbl: "Design & Deployment" },
+              { val: "Operations", lbl: "Inventory & Customer Care" }
+            ],
+            overview: {
+              context: "Two-month summer internship in a commercial environment at Bab'Kasia (Pont-à-Mousson, France): hands-on business operations and direct customer service.",
+              tools: "Web Creation Tools, Inventory & Order Logistics, Customer Relations.",
+              impact: "Strengthened adaptability, teamwork in a fast-paced setting, and practical understanding of end-user needs."
+            },
+            models: [
+              "Operations & Logistics: supplier order intake, inventory tracking, and customer order fulfillment.",
+              "Digital Presence: designed and launched the store's showcase website."
+            ],
+            proto: [
+              "In-store customer advisory, sales, and service.",
+              "Reflective takeaway: a valuable field experience complementing engineering studies through customer-centric execution."
+            ]
           }
         ]
       }
@@ -974,8 +1018,13 @@
     </div>
   </header>
 
-  <!-- ICÔNES DU BUREAU (SIMPLE CLIC) -->
+  <!-- ICÔNES DU BUREAU (COULISSES EN HAUT À GAUCHE) -->
   <main class="desktop" id="desktop">
+    <div class="desktop-icon" onclick="openWindow('win-trash')">
+      <div class="icon-box">🗑️</div>
+      <span id="lbl-trash">Coulisses</span>
+    </div>
+
     <div class="desktop-icon" onclick="openWindow('win-welcome')">
       <div class="icon-box">👨‍🚀</div>
       <span id="lbl-welcome">Accueil_PFE.txt</span>
@@ -1001,11 +1050,6 @@
       <span id="lbl-contact">Contact & Réf</span>
     </div>
 
-    <div class="desktop-icon" onclick="openWindow('win-trash')">
-      <div class="icon-box">🗑️</div>
-      <span id="lbl-trash">Coulisses</span>
-    </div>
-
     <!-- POST-IT ÉPINGLÉ -->
     <aside class="postit-widget">
       <div class="postit-title">
@@ -1016,8 +1060,31 @@
     </aside>
   </main>
 
+  <!-- FENÊTRE COULISSES (POSITIONNÉE EN HAUT À GAUCHE) -->
+  <section class="window" id="win-trash" style="top: 46px; left: 20px; width: 560px;">
+    <div class="window-header" onmousedown="startDrag(event, 'win-trash')">
+      <div class="window-controls">
+        <button class="win-dot win-close" onclick="closeWindow('win-trash')"></button>
+        <button class="win-dot win-min" onclick="closeWindow('win-trash')"></button>
+        <button class="win-dot win-max" onclick="toggleMax('win-trash')"></button>
+      </div>
+      <div class="window-title">🗑️ Coulisses_&_Engagements.log</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div class="window-body">
+      <div class="project-card">
+        <h3>🎉 FizZteam — Association Étudiante (2025–2026)</h3>
+        <p>Organisation d'événements et coordination logistique sur le campus de SIGMA Clermont : gestion d'équipe, budget et sens du collectif.</p>
+      </div>
+      <div class="project-card" style="margin-bottom:0;">
+        <h3>🏔️ Centres d'intérêt</h3>
+        <p>Aéronautique (membre actif d'associations spécialisées, titulaire du BIA) et pratique régulière des sports de plein air.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FENÊTRE 1 : ACCUEIL INCARNÉ -->
-  <section class="window active" id="win-welcome" style="top: 64px; left: 150px;">
+  <section class="window active" id="win-welcome" style="top: 64px; left: 160px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-welcome')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-welcome')"></button>
@@ -1054,7 +1121,7 @@
         <button class="win-dot win-min" onclick="closeWindow('win-projects')"></button>
         <button class="win-dot win-max" onclick="toggleMax('win-projects')"></button>
       </div>
-      <div class="window-title">📁 Cursus_&_Projets (Preuves d'Ingénierie)</div>
+      <div class="window-title">📁 Cursus_&_Projets (Preuves d'Ingénierie & Expériences)</div>
       <div style="width:36px;"></div>
     </div>
     <div class="window-body" id="projects-container"></div>
@@ -1161,39 +1228,9 @@
     </div>
   </section>
 
-  <!-- FENÊTRE 6 : COULISSES & ENGAGEMENTS -->
-  <section class="window" id="win-trash" style="top: 130px; left: 320px; width: 580px;">
-    <div class="window-header" onmousedown="startDrag(event, 'win-trash')">
-      <div class="window-controls">
-        <button class="win-dot win-close" onclick="closeWindow('win-trash')"></button>
-        <button class="win-dot win-min" onclick="closeWindow('win-trash')"></button>
-        <button class="win-dot win-max" onclick="toggleMax('win-trash')"></button>
-      </div>
-      <div class="window-title">🗑️ Coulisses_&_Engagements.log</div>
-      <div style="width:36px;"></div>
-    </div>
-    <div class="window-body">
-      <div class="project-card">
-        <h3>☀️ Projet de pseudo-satellite solaire (2026–2027)</h3>
-        <p>Développement actuel en dernière année à SIGMA Clermont autour des architectures stratosphériques / haute altitude à propulsion solaire.</p>
-      </div>
-      <div class="project-card">
-        <h3>🎉 FizZteam — Association Étudiante (2025–2026)</h3>
-        <p>Organisation d'événements et coordination logistique sur le campus de SIGMA Clermont : gestion d'équipe, budget et sens du collectif.</p>
-      </div>
-      <div class="project-card">
-        <h3>🛍️ Bab'Kasia — Expérience Terrain & Web (Été 2025)</h3>
-        <p>Vente, relation client, gestion des stocks et création du site internet de la boutique : compréhension concrète des besoins clients.</p>
-      </div>
-      <div class="project-card" style="margin-bottom:0;">
-        <h3>🏔️ Centres d'intérêt</h3>
-        <p>Aéronautique (membre actif d'associations spécialisées, titulaire du BIA) et pratique régulière des sports de plein air.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- DOCK INFÉRIEUR -->
   <nav class="dock">
+    <div class="dock-item" title="Coulisses" onclick="openWindow('win-trash')">🗑️</div>
     <div class="dock-item" title="Accueil" onclick="openWindow('win-welcome')">👨‍🚀</div>
     <div class="dock-item" title="Cursus & Projets" onclick="openWindow('win-projects')">📁</div>
     <div class="dock-item" title="Compétences" onclick="openWindow('win-skills')">📡</div>
@@ -1224,12 +1261,12 @@
       document.getElementById("top-status").textContent = d.status;
       document.getElementById("lang-btn").textContent = currentLang === "fr" ? "🇬🇧 EN" : "🇫🇷 FR";
 
+      document.getElementById("lbl-trash").textContent = d.icons.trash;
       document.getElementById("lbl-welcome").textContent = d.icons.welcome;
       document.getElementById("lbl-projects").textContent = d.icons.projects;
       document.getElementById("lbl-skills").textContent = d.icons.skills;
       document.getElementById("lbl-cv").textContent = d.icons.cv;
       document.getElementById("lbl-contact").textContent = d.icons.contact;
-      document.getElementById("lbl-trash").textContent = d.icons.trash;
 
       document.getElementById("welcome-title").textContent = d.welcomeTitle;
       document.getElementById("welcome-sub").textContent = d.welcomeSub;
