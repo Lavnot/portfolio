@@ -440,7 +440,6 @@
       margin-bottom: 10px;
     }
 
-    /* Onglets techniques par projet */
     .tab-bar {
       display: flex;
       gap: 6px;
@@ -522,6 +521,29 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+    }
+
+    .project-img-box {
+      margin-top: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: rgba(148, 163, 184, 0.08);
+    }
+
+    .project-img-box img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-img-caption {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      text-align: center;
+      font-style: italic;
     }
 
     .skill-bar-wrap {
@@ -661,7 +683,7 @@
         postitItems: [
           "📍 Basé à Clermont-Ferrand (SIGMA Clermont)",
           "🎯 Objectif : Stage PFE R&D / Structures / Indus (Mars 2027)",
-          "✈️ Projet de pseudo-satellite solaire"
+          "✈️ Projet de pseudo-satellite solaire (HAPS)"
         ],
         icons: {
           welcome: "👨‍🚀 Accueil_PFE.txt",
@@ -674,8 +696,35 @@
         tabs: ["📋 Vue d'ensemble", "📐 Calculs & Modèles", "🔬 Prototypage & Bilan"],
         projects: [
           {
+            tag: "Aéronautique Stratosphérique • Projet 3A SIGMA Clermont (2026–2027)",
+            title: "Conception d'un Pseudo-Satellite Solaire Haute Altitude (HAPS)",
+            image: "projet-haps.jpg",
+            imageCaption: "Architecture structurale & bilan énergétique du pseudo-satellite solaire (HAPS)",
+            kpis: [
+              { val: "Vol persistant", lbl: "Autonomie solaire jour/nuit" },
+              { val: "Allègement", lbl: "Structures composites / CAO" },
+              { val: "−55 °C", lbl: "Contraintes stratosphériques" }
+            ],
+            overview: {
+              context: "Projet d'ingénierie de dernière année à SIGMA Clermont portant sur le développement d'une plateforme aérienne sans pilote à propulsion solaire (High-Altitude Pseudo-Satellite), conçue pour opérer sur de longues durées en haute altitude.",
+              tools: "CATIA V5 / 3DEXPERIENCE, ANSYS (calculs de structure), Python / MATLAB (bilan énergétique et trajectoire).",
+              impact: "Intégration pluridisciplinaire des contraintes d'allègement structural, d'aérodynamique basse vitesse et d'équilibre énergétique entre production photovoltaïque et stockage batterie."
+            },
+            models: [
+              "Dimensionnement structural & masse : optimisation du ratio rigidité/masse de la voilure et du fuselage pour maximiser la charge utile embarquée.",
+              "Bilan énergétique & cycle jour/nuit : modélisation de la puissance solaire captée selon l'incidence et dimensionnement de la capacité de stockage nécessaire pour maintenir le vol de nuit.",
+              "Environnement extrême : prise en compte des faibles densités d'air et des gradients thermiques sévères en haute altitude."
+            ],
+            proto: [
+              "Démarche d'ingénierie système : arbitrage entre envergure, masse structurale, puissance propulsive et tenue mécanique aux rafales.",
+              "Travail collaboratif en équipe projet de 3e année avec jalons de revue de conception."
+            ]
+          },
+          {
             tag: "R&D Aérospatiale & Métrologie • CTU Prague (17 sem. / 530h)",
             title: "Modélisation thermo-hygro-mécanique de capteurs à fibre optique (FBG)",
+            image: "projet-prague.jpg",
+            imageCaption: "Enceinte climatique ACS DY200 et banc de traction MTS Criterion 45 — CTU Prague",
             kpis: [
               { val: "6 substrats", lbl: "Quartz à Al 7075" },
               { val: "1,98 pm/%RH", lbl: "Sensibilité RH prédite" },
@@ -700,6 +749,8 @@
           {
             tag: "Spatial & Robotique • Projet PERSEUS / CNES (Chef de projet • 8 ing.)",
             title: "Robot Multifonctions (RM) 6×6 d'intervention post-vol sur pas de tir",
+            image: "projet-perseus.jpg",
+            imageCaption: "Prototype assemblé du Robot Multifonctions 6×6 Rocker-Bogie — Projet PERSEUS / CNES",
             kpis: [
               { val: "672 W / 14,8 Nm", lbl: "4× Brushless NEMA23" },
               { val: "19,14 MPa", lbl: "Von Mises Alu 5754" },
@@ -724,6 +775,8 @@
           {
             tag: "Industrialisation & Conception Avancée • SIGMA Clermont",
             title: "Optimisation topologique, composites & maîtrise des procédés aéronautiques",
+            image: "",
+            imageCaption: "",
             kpis: [
               { val: "DFM / DFA", lbl: "Gammes & Montages" },
               { val: "Cp / Cpk", lbl: "MSP & AMDEC Process" },
@@ -760,7 +813,7 @@
         postitItems: [
           "📍 Based in Clermont-Ferrand, France (SIGMA Clermont)",
           "🎯 Seeking 6-month Master's Internship (March–Sept 2027)",
-          "✈️ Solar Pseudo-Satellite Project"
+          "✈️ Solar Pseudo-Satellite Project (HAPS)"
         ],
         icons: {
           welcome: "👨‍🚀 Welcome_PFE.txt",
@@ -773,8 +826,35 @@
         tabs: ["📋 Overview", "📐 Models & Calculations", "🔬 Prototyping & Review"],
         projects: [
           {
+            tag: "Stratospheric Aeronautics • Final-Year Project SIGMA Clermont (2026–2027)",
+            title: "Design of a High-Altitude Solar Pseudo-Satellite (HAPS)",
+            image: "projet-haps.jpg",
+            imageCaption: "Structural architecture & day/night energy balance of the solar HAPS",
+            kpis: [
+              { val: "Persistent Flight", lbl: "Day/Night Solar Endurance" },
+              { val: "Lightweighting", lbl: "Composite Structures / CAD" },
+              { val: "−55 °C", lbl: "Stratospheric Environment" }
+            ],
+            overview: {
+              context: "Final-year engineering project at SIGMA Clermont focused on developing a solar-powered High-Altitude Pseudo-Satellite (HAPS) unmanned aerial platform designed for long-endurance stratospheric missions.",
+              tools: "CATIA V5 / 3DEXPERIENCE, ANSYS (structural analysis), Python / MATLAB (energy balance & flight trajectory).",
+              impact: "Multidisciplinary integration of structural lightweighting, low-speed aerodynamics, and day/night energy balance between photovoltaic generation and battery storage."
+            },
+            models: [
+              "Structural Sizing & Mass Budget: optimizing stiffness-to-weight ratio of the wing and fuselage to maximize payload capacity.",
+              "Day/Night Energy Balance: modelling solar power harvesting vs. incidence angle and sizing battery storage capacity for continuous night flight.",
+              "Extreme Environment: accounting for low air density and severe thermal gradients at stratospheric altitudes."
+            ],
+            proto: [
+              "Systems engineering trade-offs between wingspan, structural mass, propulsion power, and gust load resistance.",
+              "Collaborative final-year engineering team workflow with formal design review milestones."
+            ]
+          },
+          {
             tag: "Aerospace R&D & Metrology • CTU Prague (17 wks / 530h)",
             title: "Thermo-Hygro-Mechanical Modelling of Fiber Bragg Grating (FBG) Sensors",
+            image: "projet-prague.jpg",
+            imageCaption: "ACS DY200 climatic chamber & MTS Criterion Model 45 tensile bench — CTU Prague",
             kpis: [
               { val: "6 Substrates", lbl: "Quartz to Al 7075" },
               { val: "1.98 pm/%RH", lbl: "Predicted RH Sensitivity" },
@@ -799,6 +879,8 @@
           {
             tag: "Space & Robotics • PERSEUS Project / CNES (Project Manager • 8 Eng.)",
             title: "6×6 Multifunctional Post-Launch Safety Rover for Launch-Pad Operations",
+            image: "projet-perseus.jpg",
+            imageCaption: "Assembled 6×6 Rocker-Bogie Multifunctional Rover prototype — PERSEUS / CNES",
             kpis: [
               { val: "672 W / 14.8 Nm", lbl: "4× Brushless NEMA23" },
               { val: "19.14 MPa", lbl: "Von Mises Al 5754" },
@@ -823,6 +905,8 @@
           {
             tag: "Manufacturing & Structural Design • SIGMA Clermont",
             title: "Topology Optimization, Composites & Aerospace Process Control",
+            image: "",
+            imageCaption: "",
             kpis: [
               { val: "DFM / DFA", lbl: "Routing & Fixtures" },
               { val: "Cp / Cpk", lbl: "SPC & Process FMEA" },
@@ -1171,6 +1255,12 @@
             <ul class="spec-list">
               ${p.proto.map(pr => `<li>${pr}</li>`).join("")}
             </ul>
+            ${p.image ? `
+              <div class="project-img-box">
+                <img src="${p.image}" alt="${p.title}" onerror="this.parentElement.style.display='none';" />
+                <div class="project-img-caption">${p.imageCaption}</div>
+              </div>
+            ` : ""}
           </div>
         </div>
       `).join("");
