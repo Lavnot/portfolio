@@ -193,6 +193,14 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
+    /* Corbeille épinglée en haut à droite */
+    .trash-icon-top-right {
+      position: fixed;
+      top: 56px;
+      right: 24px;
+      z-index: 4;
+    }
+
     .icon-box {
       width: 52px;
       height: 52px;
@@ -649,6 +657,9 @@
         align-content: flex-start;
         padding-top: 28px;
       }
+      .trash-icon-top-right {
+        position: static;
+      }
       .postit-widget {
         position: static;
         width: 92%;
@@ -657,6 +668,7 @@
       .window {
         top: 44px !important;
         left: 3vw !important;
+        right: auto !important;
         width: 94vw !important;
         height: 78vh !important;
       }
@@ -700,12 +712,12 @@
           "✈️ Projet de pseudo-satellite solaire (HAPS)"
         ],
         icons: {
-          trash: "🗑️ Coulisses",
           welcome: "👨‍🚀 Accueil_PFE.txt",
           projects: "📁 Cursus & Projets",
           skills: "📡 Compétences",
           cv: "📄 CV_2027.pdf",
-          contact: "✉️ Contact & Réf"
+          contact: "✉️ Contact & Réf",
+          trash: "🗑️ Coulisses"
         },
         tabs: ["📋 Vue d'ensemble", "📐 Calculs & Modèles", "🔬 Prototypage & Bilan"],
         projects: [
@@ -858,12 +870,12 @@
           "✈️ Solar Pseudo-Satellite Project (HAPS)"
         ],
         icons: {
-          trash: "🗑️ Behind_Scenes",
           welcome: "👨‍🚀 Welcome_PFE.txt",
           projects: "📁 Curriculum & Projects",
           skills: "📡 Skills_Matrix",
           cv: "📄 Resume_2027.pdf",
-          contact: "✉️ Contact & Ref"
+          contact: "✉️ Contact & Ref",
+          trash: "🗑️ Behind_Scenes"
         },
         tabs: ["📋 Overview", "📐 Models & Calculations", "🔬 Prototyping & Review"],
         projects: [
@@ -1018,13 +1030,8 @@
     </div>
   </header>
 
-  <!-- ICÔNES DU BUREAU (COULISSES EN HAUT À GAUCHE) -->
+  <!-- ICÔNES DU BUREAU -->
   <main class="desktop" id="desktop">
-    <div class="desktop-icon" onclick="openWindow('win-trash')">
-      <div class="icon-box">🗑️</div>
-      <span id="lbl-trash">Coulisses</span>
-    </div>
-
     <div class="desktop-icon" onclick="openWindow('win-welcome')">
       <div class="icon-box">👨‍🚀</div>
       <span id="lbl-welcome">Accueil_PFE.txt</span>
@@ -1050,7 +1057,13 @@
       <span id="lbl-contact">Contact & Réf</span>
     </div>
 
-    <!-- POST-IT ÉPINGLÉ -->
+    <!-- CORBEILLE ÉPINGLÉE EN HAUT À DROITE -->
+    <div class="desktop-icon trash-icon-top-right" onclick="openWindow('win-trash')">
+      <div class="icon-box">🗑️</div>
+      <span id="lbl-trash">Coulisses</span>
+    </div>
+
+    <!-- POST-IT ÉPINGLÉ EN BAS À DROITE -->
     <aside class="postit-widget">
       <div class="postit-title">
         <span id="postit-title">📌 En ce moment</span>
@@ -1060,8 +1073,8 @@
     </aside>
   </main>
 
-  <!-- FENÊTRE COULISSES (POSITIONNÉE EN HAUT À GAUCHE) -->
-  <section class="window" id="win-trash" style="top: 46px; left: 20px; width: 560px;">
+  <!-- FENÊTRE COULISSES (POSITIONNÉE EN HAUT À DROITE) -->
+  <section class="window" id="win-trash" style="top: 46px; right: 24px; width: 540px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-trash')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-trash')"></button>
@@ -1230,12 +1243,12 @@
 
   <!-- DOCK INFÉRIEUR -->
   <nav class="dock">
-    <div class="dock-item" title="Coulisses" onclick="openWindow('win-trash')">🗑️</div>
     <div class="dock-item" title="Accueil" onclick="openWindow('win-welcome')">👨‍🚀</div>
     <div class="dock-item" title="Cursus & Projets" onclick="openWindow('win-projects')">📁</div>
     <div class="dock-item" title="Compétences" onclick="openWindow('win-skills')">📡</div>
     <div class="dock-item" title="CV" onclick="openWindow('win-cv')">📄</div>
     <div class="dock-item" title="Contact" onclick="openWindow('win-contact')">✉️</div>
+    <div class="dock-item" title="Coulisses" onclick="openWindow('win-trash')">🗑️</div>
   </nav>
 
   <!-- =======================================================================
@@ -1365,6 +1378,7 @@
       } else {
         win.style.top = "42px";
         win.style.left = "2vw";
+        win.style.right = "auto";
         win.style.width = "96vw";
         win.style.height = "84vh";
       }
@@ -1390,6 +1404,7 @@
       const offsetY = e.clientY - win.offsetTop;
 
       function onMove(ev) {
+        win.style.right = "auto";
         win.style.left = Math.max(0, ev.clientX - offsetX) + "px";
         win.style.top = Math.max(36, ev.clientY - offsetY) + "px";
       }
