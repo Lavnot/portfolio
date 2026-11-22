@@ -11,18 +11,18 @@
     :root {
       --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 45%, #fef3c7 100%);
       --wallpaper-grid: rgba(14, 116, 144, 0.06);
-      --glass-bg: rgba(255, 255, 255, 0.78);
-      --glass-header: rgba(248, 250, 252, 0.92);
-      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-bg: rgba(255, 255, 255, 0.82);
+      --glass-header: rgba(248, 250, 252, 0.94);
+      --glass-border: rgba(255, 255, 255, 0.88);
       --window-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);
       --text-main: #0f172a;
       --text-muted: #475569;
       --accent: #0284c7;
       --accent-soft: #e0f2fe;
       --accent-hover: #0369a1;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --card-border: rgba(148, 163, 184, 0.25);
-      --dock-bg: rgba(255, 255, 255, 0.72);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(148, 163, 184, 0.28);
+      --dock-bg: rgba(255, 255, 255, 0.76);
       --postit-bg: #fef9c3;
       --postit-border: #fde047;
       --postit-text: #422006;
@@ -33,18 +33,18 @@
     body.dark-mode {
       --bg-gradient: radial-gradient(circle at 20% 20%, #0f2942 0%, #090d16 60%, #05070c 100%);
       --wallpaper-grid: rgba(56, 189, 248, 0.06);
-      --glass-bg: rgba(15, 23, 42, 0.82);
-      --glass-header: rgba(30, 41, 59, 0.92);
-      --glass-border: rgba(148, 163, 184, 0.2);
-      --window-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      --glass-bg: rgba(15, 23, 42, 0.85);
+      --glass-header: rgba(30, 41, 59, 0.94);
+      --glass-border: rgba(148, 163, 184, 0.22);
+      --window-shadow: 0 24px 60px rgba(0, 0, 0, 0.58);
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-soft: rgba(56, 189, 248, 0.16);
       --accent-hover: #7dd3fc;
-      --card-bg: rgba(30, 41, 59, 0.75);
-      --card-border: rgba(148, 163, 184, 0.18);
-      --dock-bg: rgba(15, 23, 42, 0.78);
+      --card-bg: rgba(30, 41, 59, 0.8);
+      --card-border: rgba(148, 163, 184, 0.2);
+      --dock-bg: rgba(15, 23, 42, 0.82);
       --postit-bg: rgba(254, 240, 138, 0.14);
       --postit-border: rgba(250, 204, 21, 0.35);
       --postit-text: #fef08a;
@@ -70,7 +70,6 @@
       user-select: none;
     }
 
-    /* Grille technique subtile en arrière-plan */
     body::before {
       content: "";
       position: absolute;
@@ -84,7 +83,7 @@
     }
 
     /* =====================================================================
-       2. BARRE SUPÉRIEURE (TOP BAR)
+       2. BARRE SUPÉRIEURE
        ===================================================================== */
     .topbar {
       position: fixed;
@@ -161,7 +160,7 @@
     }
 
     /* =====================================================================
-       3. BUREAU & ICÔNES (SIMPLE CLIC)
+       3. BUREAU & ICÔNES
        ===================================================================== */
     .desktop {
       position: relative;
@@ -177,7 +176,7 @@
     }
 
     .desktop-icon {
-      width: 102px;
+      width: 106px;
       padding: 10px 6px;
       border-radius: 12px;
       display: flex;
@@ -223,7 +222,7 @@
       position: fixed;
       right: 24px;
       bottom: 86px;
-      width: 270px;
+      width: 280px;
       background: var(--postit-bg);
       border: 1px solid var(--postit-border);
       color: var(--postit-text);
@@ -262,9 +261,9 @@
        ===================================================================== */
     .window {
       position: absolute;
-      width: 680px;
+      width: 720px;
       max-width: 94vw;
-      max-height: 80vh;
+      max-height: 82vh;
       background: var(--glass-bg);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
@@ -296,6 +295,7 @@
       align-items: center;
       justify-content: space-between;
       cursor: grab;
+      flex-shrink: 0;
     }
 
     .window-header:active {
@@ -334,7 +334,7 @@
     }
 
     /* =====================================================================
-       6. COMPOSANTS INTERNES (ACCUEIL, PROJETS, COMPÉTENCES, CV)
+       6. COMPOSANTS INTERNES & ONGLETS PROJETS
        ===================================================================== */
     .welcome-hero {
       display: flex;
@@ -421,7 +421,7 @@
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .project-tag {
@@ -437,7 +437,70 @@
 
     .project-card h3 {
       font-size: 16px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Onglets techniques par projet */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .tab-panel {
+      display: none;
+      font-size: 13.5px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .kpi-box {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .kpi-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .kpi-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
     .project-grid {
@@ -452,6 +515,13 @@
       background: rgba(148, 163, 184, 0.08);
       padding: 10px;
       border-radius: 8px;
+    }
+
+    .spec-list {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .skill-bar-wrap {
@@ -527,7 +597,6 @@
       font-size: 21px;
       cursor: pointer;
       transition: transform 0.18s ease;
-      position: relative;
     }
 
     .dock-item:hover {
@@ -559,11 +628,8 @@
         flex-direction: column;
         text-align: center;
       }
-      .project-grid {
+      .project-grid, .kpi-grid {
         grid-template-columns: 1fr;
-      }
-      .status-pill span.hide-mobile {
-        display: none;
       }
     }
   </style>
@@ -571,14 +637,13 @@
 <body>
 
   <!-- =======================================================================
-       BLOC DE CONFIGURATION FACILE À MODIFIER (VOS DONNÉES FR / EN)
-       Modifiez simplement les textes ou noms de fichiers ci-dessous !
+       BLOC DE CONFIGURATION CENTRALISÉ (VOS DONNÉES FR / EN DÉTAILLÉES)
        ======================================================================= -->
   <script>
     const PORTFOLIO_DATA = {
-      photoFile: "photo-tom.jpg", // Déposez votre photo sous ce nom sur GitHub
-      cvFileFR: "CV_Tom_Darsonval_FR.pdf", // Nom exact de votre CV français sur GitHub
-      cvFileEN: "CV_Tom_Darsonval_EN.pdf", // Nom exact de votre CV anglais sur GitHub
+      photoFile: "photo-tom.jpg",
+      cvFileFR: "CV_Tom_Darsonval_FR.pdf",
+      cvFileEN: "CV_Tom_Darsonval_EN.pdf",
       email: "tom.darsonval@sigma-clermont.fr",
       phone: "+33 6 13 47 77 85",
       linkedin: "https://www.linkedin.com/in/tom-darsonval-491250333/",
@@ -588,9 +653,9 @@
         welcomeTitle: "Bonjour et bienvenue sur mon bureau virtuel !",
         welcomeSub: "Tom Darsonval • Élève-Ingénieur Mécanique & Robotique (SIGMA Clermont)",
         welcomeText:
-          "Je conçois et valide des systèmes mécaniques robustes pour l'aéronautique, le spatial et la robotique. Explorez mes réalisations en cliquant sur les dossiers du bureau ou lancez la visite guidée de 30 secondes.",
+          "Je conçois, modélise et valide des systèmes mécaniques et instrumentés pour l'aéronautique, le spatial et la robotique. Explorez mes dossiers techniques (avec calculs, modèles et bilans réflexifs) ou lancez la visite guidée.",
         btnTour: "🚀 Visite guidée (30 sec)",
-        btnProjects: "📁 Explorer mes projets",
+        btnProjects: "📁 Explorer Cursus & Projets",
         btnCV: "📄 Ouvrir mon CV",
         postitTitle: "📌 En ce moment",
         postitItems: [
@@ -606,30 +671,78 @@
           contact: "✉️ Contact & Réf",
           trash: "🗑️ Coulisses"
         },
+        tabs: ["📋 Vue d'ensemble", "📐 Calculs & Modèles", "🔬 Prototypage & Bilan"],
         projects: [
           {
-            tag: "R&D & Instrumentation • CTU Prague (4 mois / 530h)",
+            tag: "R&D Aérospatiale & Métrologie • CTU Prague (17 sem. / 530h)",
             title: "Modélisation thermo-hygro-mécanique de capteurs à fibre optique (FBG)",
-            context: "Stage de recherche en ingénierie aérospatiale : isoler la déformation mécanique réelle face aux perturbations de température et d'humidité.",
-            actions: "Modèles analytiques (shear-lag) sur 6 substrats (Invar, acier, cuivre, duralumin). Campagnes d'essais couplant enceinte climatique ACS et banc de traction MTS Criterion.",
-            tools: "Python, MATLAB, LaTeX, Banc MTS Criterion, Enceinte ACS",
-            result: "Établissement de valeurs de référence prédictives pour la surveillance de santé structurale (SHM) aéronautique."
+            kpis: [
+              { val: "6 substrats", lbl: "Quartz à Al 7075" },
+              { val: "1,98 pm/%RH", lbl: "Sensibilité RH prédite" },
+              { val: "5 protocoles", lbl: "Campagne normalisée" }
+            ],
+            overview: {
+              context: "Stage de recherche au Dept. of Aerospace Engineering (CTU Prague, dir. Prof. Milan Dvořák) sur le Structural Health Monitoring (SHM) de structures composites CFRP. Objectif : découpler la déformation mécanique réelle des dérives de température et d'humidité sur capteurs FBG (Ø 125 µm).",
+              tools: "Python, MATLAB, LaTeX (rapport 52 p.), Interrogateur FBG 1550 nm, Enceinte climatique ACS DY200, Banc de traction MTS Criterion 45, Sondes PT100 4 fils.",
+              impact: "Établissement d'un cadre mathématique complet de découplage, valeurs de contrôle prédictives avant essai et câblage complet de la chaîne de mesure."
+            },
+            models: [
+              "Modèle revêtement-humidité (fibre libre) : équilibre mécanique verre/polyimide isolant K_RH ≈ 1,98 pm/%RH et identifiant le coefficient de gonflement β_c comme paramètre critique.",
+              "Transfert de déformation (Shear-Lag de Cox) : formulation de k_trans = 1 − 1/cosh(γL/2) à travers l'adhésif cyanoacrylate Kyowa CC-33A (−196°C à +120°C).",
+              "Échelle de 6 substrats (CTE de 0,54 à 23,6×10⁻⁶/K) : prédictions thermiques K_T^bonded — Quartz (10,00 pm/°C, test sans paramètre de α_f), Invar certifié (11,54), Acier (23,99), Cuivre (29,85), Laiton (34,36) et Duralumin Al 7075 (38,14 pm/°C). Sensibilité mécanique : K_ε ≈ 1,22 pm/µε."
+            ],
+            proto: [
+              "Rédaction de 5 fiches protocoles (A1-T-001, A1-RH-001, A2-001, A4-001, B1-001) couvrant 18 fibres collées (3 revêtements : Polyimide, Polyacrylate, ORMOCER®) + référence libre, avec balayages randomisés (10–80°C puis 95°C) et paliers 20–80% RH.",
+              "Préparation mécanique des éprouvettes (usinage de méplat sur barre d'Invar) et démarrage des essais sur fibre libre.",
+              "Bilan réflexif : discipline de dérivation (séparation stricte entre équations dérivées, prédictions et mesures à finaliser) et gestion du chemin critique sur les approvisionnements."
+            ]
           },
           {
-            tag: "Spatial & Robotique • Projet Perseus / CNES (2024–2026)",
-            title: "Robot mobile multifonction de sécurité sur pas de tir & support lanceur",
-            context: "Projet collaboratif (équipe de 8) soutenu par le CNES pour sécuriser les opérations au sol et concevoir un dispositif de support au décollage.",
-            actions: "Rédaction du cahier des charges, dimensionnement du châssis aluminium, calculs éléments finis (FEA), télémétrie LoRa et pilotage vidéo 360° basse latence.",
-            tools: "CAO 3D, Calculs EF (FEA), LoRa, Vidéo 360°, Gestion de projet",
-            result: "Validation d'un prototype robuste adapté aux contraintes d'environnement de lancement spatial."
+            tag: "Spatial & Robotique • Projet PERSEUS / CNES (Chef de projet • 8 ing.)",
+            title: "Robot Multifonctions (RM) 6×6 d'intervention post-vol sur pas de tir",
+            kpis: [
+              { val: "672 W / 14,8 Nm", lbl: "4× Brushless NEMA23" },
+              { val: "19,14 MPa", lbl: "Von Mises Alu 5754" },
+              { val: "24 Ah LiFePO4", lbl: "Autonomie −20°C" }
+            ],
+            overview: {
+              context: "Programme PERSEUS (Direction des Lanceurs du CNES) : conception d'un robot téléopéré intervenant dans la zone d'exclusion après atterrissage ou tir avorté d'un démonstrateur bi-liquide (LOX/éthanol) à Kiruna (Suède) par −10°C/−20°C.",
+              tools: "3DEXPERIENCE (Sheet Metal Design), SolidWorks Simulation (FEA), Découpe laser, Presse plieuse DURMA PBF 2560, Tournage Alu, Impression 3D, Raspberry Pi 5 (Python/Pygame), Teensy 4.1 (C++).",
+              impact: "Chef de projet (pilotage des 6 jalons CNES, coordination des pôles Châssis/Motorisation/Électronique, rédaction de la Note Technique CNES) et validation d'un prototype fonctionnel."
+            },
+            models: [
+              "Châssis & FEA (SolidWorks Simulation) : structure mécano-pliée 4 pièces (1000×386×250 mm, masse < 50 kg). Validation de l'Aluminium 5754 (1 mm) : σ_max = 19,14 MPa (charge répartie) et 45,46 MPa (charge localisée sous bras) < Re/1,5 = 80 MPa, avec cuvelage soudé TIG/MIG et joint silicone IP64.",
+              "Suspension 6×6 Rocker-Bogie & Liaison pivot : géométrie triangulaire (entraxe 365 mm, roues Ø 215 mm, garde au sol 20 cm, franchissement d'obstacles de 20 cm). Vérification RDM de l'axe pivot acier Ø 8 mm sur 2 roulements 608 RS : σ_VM ≈ 191 MPa < Re = 235 MPa.",
+              "Motorisation & Énergie : 4 moteurs Brushless 57DMWH75 NEMA23 (réducteur 15:1) → 11,77 km/h et 14,8 Nm pour le pivotement sur place (Skid-Steering). Bilan énergétique (41,78 W typique / 167,66 W pointe) → besoin 9,1 Ah couvert par 2 batteries LiFePO4 12,8 V – 12 Ah (24 Ah) opérationnelles jusqu'à −20°C."
+            ],
+            proto: [
+              "Prototypage multi-procédés au CTT/Fablab : bascule de l'acier S235 2 mm vers 0,8 mm après retour d'expérience masse (budget châssis : 185 €), découpe laser des bras Rocker-Bogie, tournage des axes aluminium et impression 3D des carters (budget déplacement : 82 €).",
+              "Architecture Maître/Esclave & Sécurité : Raspberry Pi 5 (pilotage manette Xbox, deadzone 0,20, tourelle caméra Pan/Tilt, débogage distant VS Code Remote-SSH) couplé en série USB à un Teensy 4.1 temps réel (ponts en H BTS7960 + Watchdog matériel 500 ms).",
+              "Architecture finale définie : liaison radio longue portée TBS Crossfire 868 MHz (portée 1 km) et retour vidéo numérique Walksnail Avatar HD."
+            ]
           },
           {
-            tag: "Industrialisation & Conception • SIGMA Clermont",
+            tag: "Industrialisation & Conception Avancée • SIGMA Clermont",
             title: "Optimisation topologique, composites & maîtrise des procédés aéronautiques",
-            context: "Maîtrise du cycle complet d'un composant aéronautique : allègement structural, assemblages et production sans défaut.",
-            actions: "Optimisation topologique (ANSYS/Inspire), gammes d'usinage, transfert de cotes, montages d'usinage (DFM/DFA), AMDEC Process, MSP (Cp/Cpk) et robotique (RoboDK).",
-            tools: "CATIA V5, SolidWorks, ANSYS, Inspire, RoboDK, MSP/AMDEC",
-            result: "Capacité à faire le lien direct entre le bureau d'études (RDM/CAO) et les exigences de l'atelier de production."
+            kpis: [
+              { val: "DFM / DFA", lbl: "Gammes & Montages" },
+              { val: "Cp / Cpk", lbl: "MSP & AMDEC Process" },
+              { val: "ANSYS / CATIA", lbl: "Allègement & CAO" }
+            ],
+            overview: {
+              context: "Formation d'ingénieur spécialisée en Machines, Robots et Systèmes : maîtrise de la chaîne numérique et industrielle complète d'un composant aéronautique, de la conception légère à la qualification atelier.",
+              tools: "CATIA V5, SolidWorks, ANSYS, Altair Inspire, RoboDK, GRAFCET (IEC 61131), Plans d'Expériences (DOE).",
+              impact: "Capacité à concevoir des pièces directement industrialisables en intégrant dès l'amont les tolérances de fabrication, l'ergonomie poste et la capabilité machine."
+            },
+            models: [
+              "Conception & Allègement : dimensionnement d'assemblages structuraux (vissés et collés), mise en œuvre de matériaux composites et plastiques (thermoformage, injection), optimisation topologique et paramétrique sous ANSYS et Inspire.",
+              "Industrialisation & Cotation : rédaction de gammes d'usinage, transfert de cotes et tolérancement géométrique, conception de montages d'usinage (DFM/DFA).",
+              "Qualité & Variabilité : analyse de risques AMDEC Process, Plans d'Expériences (DOE), analyse des causes racines et Maîtrise Statistique des Procédés (MSP, indices de capabilité Cp, Cpk)."
+            ],
+            proto: [
+              "Automatisation & Robotique industrielle : programmation hors-ligne de cellules robotisées sous RoboDK et programmation d'automates programmables (IEC 61131 / GRAFCET).",
+              "Sécurité & Ergonomie atelier : conception de postes de travail et mise en conformité sécurité machines selon la norme ISO 13849."
+            ]
           }
         ]
       },
@@ -639,9 +752,9 @@
         welcomeTitle: "Hello and welcome to my virtual workspace!",
         welcomeSub: "Tom Darsonval • Final-Year Mechanical & Robotics Engineering Student (SIGMA Clermont)",
         welcomeText:
-          "I design and validate robust mechanical systems for aerospace, space, and robotics applications. Click any desktop folder to explore my engineering case studies or start the 30-second guided tour.",
+          "I design, model, and validate mechanical and instrumented systems for aerospace, space, and robotics. Explore my engineering case studies (including analytical models, FEA results, and prototyping) or start the guided tour.",
         btnTour: "🚀 30-Sec Guided Tour",
-        btnProjects: "📁 Explore Projects",
+        btnProjects: "📁 Explore Curriculum & Projects",
         btnCV: "📄 Open Resume",
         postitTitle: "📌 Currently",
         postitItems: [
@@ -654,33 +767,81 @@
           projects: "📁 Curriculum & Projects",
           skills: "📡 Skills_Matrix",
           cv: "📄 Resume_2027.pdf",
-          contact: "✉️ Contact_&_Ref",
+          contact: "✉️ Contact & Ref",
           trash: "🗑️ Behind_Scenes"
         },
+        tabs: ["📋 Overview", "📐 Models & Calculations", "🔬 Prototyping & Review"],
         projects: [
           {
-            tag: "R&D & Instrumentation • CTU Prague (4 months / 530h)",
+            tag: "Aerospace R&D & Metrology • CTU Prague (17 wks / 530h)",
             title: "Thermo-Hygro-Mechanical Modelling of Fiber Bragg Grating (FBG) Sensors",
-            context: "Aerospace research internship: decoupling true mechanical strain from temperature and relative humidity cross-sensitivities.",
-            actions: "Derived analytical shear-lag strain-transfer models across 6 substrates (Invar, steel, copper, duralumin). Ran experimental campaigns on an ACS climatic chamber and MTS Criterion tensile bench.",
-            tools: "Python, MATLAB, LaTeX, MTS Criterion, ACS Climatic Chamber",
-            result: "Established predictive benchmark values for aerospace Structural Health Monitoring (SHM)."
+            kpis: [
+              { val: "6 Substrates", lbl: "Quartz to Al 7075" },
+              { val: "1.98 pm/%RH", lbl: "Predicted RH Sensitivity" },
+              { val: "5 Protocols", lbl: "Standardized Campaign" }
+            ],
+            overview: {
+              context: "Research internship at the Dept. of Aerospace Engineering (CTU Prague, supervised by Prof. Milan Dvořák) focused on Structural Health Monitoring (SHM) of CFRP aerospace structures: decoupling mechanical strain from temperature and humidity cross-sensitivities on Ø 125 µm FBG sensors.",
+              tools: "Python, MATLAB, LaTeX (52-page report), 1550 nm FBG Interrogator, ACS DY200 Climatic Chamber, MTS Criterion Model 45 Tensile Bench, 4-wire PT100 probes.",
+              impact: "Derived a complete mathematical decoupling framework, computed predictive control values prior to testing, and wired/verified the full measurement chain."
+            },
+            models: [
+              "Coating-Humidity Model (free fiber): glass/polyimide mechanical force balance predicting K_RH ≈ 1.98 pm/%RH and isolating the coating swelling coefficient β_c as the key parameter to invert.",
+              "Strain-Transfer Mechanics (Cox Shear-Lag): formulated k_trans = 1 − 1/cosh(γL/2) across the cyanoacrylate bondline (Kyowa CC-33A, −196°C to +120°C) for surface-bonded sensors.",
+              "Six-Substrate CTE Ladder (0.54 to 23.6×10⁻⁶/K): computed predictive thermal sensitivities K_T^bonded — Fused Quartz (10.00 pm/°C, parameter-free α_f check), certified Invar (11.54), Steel (23.99), Copper (29.85), Brass (34.36), and Duralumin Al 7075 (38.14 pm/°C). Mechanical sensitivity: K_ε ≈ 1.22 pm/µε."
+            ],
+            proto: [
+              "Authored 5 experimental protocol sheets (A1-T-001, A1-RH-001, A2-001, A4-001, B1-001) covering 18 bonded fibers (3 coatings: Polyimide, Polyacrylate, ORMOCER®) + free reference, with randomized sweeps (10–80°C then 95°C) and 20–80% RH steps.",
+              "Machined instrumented test coupons (milling flat surfaces on the Invar bar) and initiated free-fiber baseline runs.",
+              "Reflective takeaway: strict derivation discipline (separating derived equations, predictions, and pending measurements) and early critical-path management for long-lead lab supplies."
+            ]
           },
           {
-            tag: "Space & Robotics • Perseus Project / CNES (2024–2026)",
-            title: "Multifunctional Launch-Site Safety Mobile Robot & Take-Off Support",
-            context: "2-year student space project (8-person team) supported by CNES to secure launch-pad operations and design a launch vehicle support device.",
-            actions: "Authored technical specifications, sized the aluminum chassis, ran finite element stress simulations (FEA), and integrated LoRa telemetry + low-latency 360° video piloting.",
-            tools: "3D CAD, FEA Simulation, LoRa Telemetry, 360° Video, Systems Engineering",
-            result: "Validated a ruggedized mobile prototype tailored for launch-pad operational constraints."
+            tag: "Space & Robotics • PERSEUS Project / CNES (Project Manager • 8 Eng.)",
+            title: "6×6 Multifunctional Post-Launch Safety Rover for Launch-Pad Operations",
+            kpis: [
+              { val: "672 W / 14.8 Nm", lbl: "4× Brushless NEMA23" },
+              { val: "19.14 MPa", lbl: "Von Mises Al 5754" },
+              { val: "24 Ah LiFePO4", lbl: "Rated down to −20°C" }
+            ],
+            overview: {
+              context: "CNES Launchers Directorate PERSEUS program: designed a teleoperated rover operating inside the post-flight exclusion zone (landing or aborted launch of a LOX/ethanol bi-liquid demonstrator at Kiruna, Sweden, at −10°C/−20°C) for visual inspection and remote valve passivation.",
+              tools: "3DEXPERIENCE (Sheet Metal Design), SolidWorks Simulation (FEA), Laser Cutting, DURMA PBF 2560 Press Brake, Aluminum Turning, 3D Printing, Raspberry Pi 5 (Python/Pygame), Teensy 4.1 (C++).",
+              impact: "Acted as Project Manager (leading 6 CNES milestones, coordinating Chassis/Powertrain/Electronics sub-teams, authoring the official CNES Technical Note) and delivered a working prototype."
+            },
+            models: [
+              "Chassis & FEA (SolidWorks Simulation): 4-part sheet-metal chassis (1000×386×250 mm, < 50 kg). Validated 1 mm Aluminum 5754 for the final rover: σ_max = 19.14 MPa (distributed load) and 45.46 MPa (localized arm load) < Re/1.5 = 80 MPa, with TIG/MIG seam welding and IP64 silicone sealing.",
+              "6×6 Rocker-Bogie Suspension & Pivot Joint: triangular kinematics (365 mm wheelbase, Ø 215 mm wheels, 20 cm ground clearance & obstacle climbing). Verified Ø 8 mm steel pivot shaft on dual 608 RS bearings: σ_VM ≈ 191 MPa < Re = 235 MPa.",
+              "Powertrain & Energy Budget: 4× 57DMWH75 NEMA23 Brushless motors (15:1 gearbox) delivering 11.77 km/h and 14.8 Nm for zero-radius skid-steering. Power budget (41.78 W typical / 167.66 W peak) → 9.1 Ah requirement met by dual 12.8 V – 12 Ah LiFePO4 batteries (24 Ah total) rated down to −20°C."
+            ],
+            proto: [
+              "Multi-process workshop prototyping: iterated from 2 mm to 0.8 mm S235 steel after mass review (chassis budget: €185), laser-cut Rocker-Bogie arms, turned aluminum pivot shafts, and 3D-printed motor housings (mobility budget: €82).",
+              "Master/Slave Embedded Architecture: Raspberry Pi 5 (Xbox controller input, 0.20 deadzone, Pan/Tilt camera control, remote debugging via VS Code Remote-SSH) linked via USB serial to a real-time Teensy 4.1 (BTS7960 H-bridges + 500 ms hardware Watchdog).",
+              "Final operational architecture: TBS Crossfire 868 MHz long-range radio (1 km range) and Walksnail Avatar HD digital video downlink."
+            ]
           },
           {
             tag: "Manufacturing & Structural Design • SIGMA Clermont",
             title: "Topology Optimization, Composites & Aerospace Process Control",
-            context: "End-to-end aerospace product engineering: structural lightweighting, mechanical fastening, and zero-defect manufacturing.",
-            actions: "Topology optimization (ANSYS/Inspire), machining process routing, tolerance stack-up, fixture design (DFM/DFA), Process FMEA, SPC (Cp/Cpk), and off-line robotics (RoboDK).",
-            tools: "CATIA V5, SolidWorks, ANSYS, Inspire, RoboDK, SPC/FMEA",
-            result: "Bridging structural R&D design with shop-floor manufacturing constraints."
+            kpis: [
+              { val: "DFM / DFA", lbl: "Routing & Fixtures" },
+              { val: "Cp / Cpk", lbl: "SPC & Process FMEA" },
+              { val: "ANSYS / CATIA", lbl: "Lightweighting & CAD" }
+            ],
+            overview: {
+              context: "Graduate mechanical engineering specialization (Machines, Robots & Systems): mastering the full digital and manufacturing lifecycle of aerospace components from structural lightweighting to shop-floor qualification.",
+              tools: "CATIA V5, SolidWorks, ANSYS, Altair Inspire, RoboDK, GRAFCET (IEC 61131), Design of Experiments (DOE).",
+              impact: "Bridging structural R&D simulation with manufacturing tolerances, workstation ergonomics, and statistical process capability."
+            },
+            models: [
+              "Structural Design & Lightweighting: bolted and bonded structural joints, composite and polymer processing (thermoforming, injection molding), topology and parametric optimization in ANSYS and Inspire.",
+              "Manufacturing Engineering: machining process routing, geometric dimensioning & tolerance stack-up, machining fixture design (DFM/DFA).",
+              "Quality & Process Control: Process FMEA (AMDEC), Design of Experiments (DOE), root cause analysis, and Statistical Process Control (SPC, Cp/Cpk)."
+            ],
+            proto: [
+              "Industrial Automation & Robotics: off-line robotic cell programming in RoboDK and PLC programming (IEC 61131 / GRAFCET).",
+              "Shop-Floor Safety & Ergonomics: workstation design and machine safety compliance per ISO 13849."
+            ]
           }
         ]
       }
@@ -712,7 +873,7 @@
 
     <div class="desktop-icon" onclick="openWindow('win-projects')">
       <div class="icon-box">📁</div>
-      <span id="lbl-projects">Projets_&_Preuves</span>
+      <span id="lbl-projects">Cursus & Projets</span>
     </div>
 
     <div class="desktop-icon" onclick="openWindow('win-skills')">
@@ -727,7 +888,7 @@
 
     <div class="desktop-icon" onclick="openWindow('win-contact')">
       <div class="icon-box">✉️</div>
-      <span id="lbl-contact">Contact_&_Réf</span>
+      <span id="lbl-contact">Contact & Réf</span>
     </div>
 
     <div class="desktop-icon" onclick="openWindow('win-trash')">
@@ -775,15 +936,15 @@
     </div>
   </section>
 
-  <!-- FENÊTRE 2 : PROJETS & PREUVES -->
-  <section class="window" id="win-projects" style="top: 90px; left: 210px; width: 740px;">
+  <!-- FENÊTRE 2 : CURSUS & PROJETS DÉTAILLÉS -->
+  <section class="window" id="win-projects" style="top: 84px; left: 200px; width: 780px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-projects')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-projects')"></button>
         <button class="win-dot win-min" onclick="closeWindow('win-projects')"></button>
         <button class="win-dot win-max" onclick="toggleMax('win-projects')"></button>
       </div>
-      <div class="window-title">📁 01_Projets_&_Preuves (Approche Par Compétences)</div>
+      <div class="window-title">📁 Cursus_&_Projets (Preuves d'Ingénierie)</div>
       <div style="width:36px;"></div>
     </div>
     <div class="window-body" id="projects-container"></div>
@@ -802,11 +963,11 @@
     </div>
     <div class="window-body">
       <div class="skill-bar-wrap">
-        <div class="skill-label"><span>CAO & Simulation (CATIA V5, SolidWorks, Fusion 360, ANSYS, Inspire)</span><span>90%</span></div>
+        <div class="skill-label"><span>CAO & Simulation (CATIA V5, 3DEXPERIENCE, SolidWorks, ANSYS, Inspire)</span><span>90%</span></div>
         <div class="skill-track"><div class="skill-fill" style="width:90%"></div></div>
       </div>
       <div class="skill-bar-wrap">
-        <div class="skill-label"><span>Instrumentation, Essais & Data (FBG, MTS, Enceinte ACS, Python, MATLAB)</span><span>88%</span></div>
+        <div class="skill-label"><span>Instrumentation, Essais & Data (FBG, MTS Criterion, ACS, Python, MATLAB)</span><span>88%</span></div>
         <div class="skill-track"><div class="skill-fill" style="width:88%"></div></div>
       </div>
       <div class="skill-bar-wrap">
@@ -814,8 +975,8 @@
         <div class="skill-track"><div class="skill-fill" style="width:85%"></div></div>
       </div>
       <div class="skill-bar-wrap">
-        <div class="skill-label"><span>Automatisation & Robotique (RoboDK, GRAFCET / IEC 61131, LoRa)</span><span>80%</span></div>
-        <div class="skill-track"><div class="skill-fill" style="width:80%"></div></div>
+        <div class="skill-label"><span>Systèmes Embarqués & Robotique (Raspberry Pi, Teensy, RoboDK, GRAFCET)</span><span>82%</span></div>
+        <div class="skill-track"><div class="skill-fill" style="width:82%"></div></div>
       </div>
 
       <h4 style="margin-top:16px; font-size:13px; color:var(--text-muted);">CERTIFICATIONS & LANGUES</h4>
@@ -846,7 +1007,7 @@
       <div class="project-card">
         <h3>Tom Darsonval — Élève-Ingénieur Mécanique & Robotique</h3>
         <p style="color:var(--text-muted); font-size:13px; margin-bottom:10px;">
-          • SIGMA Clermont (2024–2027)  
+          • SIGMA Clermont (2024–2027) — Filière Machines, Robots et Systèmes<br>
           • CPGE PT* Lycée Henri Loritz, Nancy (2022–2024)
         </p>
         <p><strong>Recherche Stage Fin d'Études (6 mois) :</strong> 15 mars au 25 septembre 2027 — Aéronautique, Spatial, Robotique (R&D mécanique, structures, essais, industrialisation).</p>
@@ -859,14 +1020,14 @@
   </section>
 
   <!-- FENÊTRE 5 : CONTACT & RÉFÉRENCES -->
-  <section class="window" id="win-contact" style="top: 120px; left: 290px; width: 560px;">
+  <section class="window" id="win-contact" style="top: 120px; left: 290px; width: 580px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-contact')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-contact')"></button>
         <button class="win-dot win-min" onclick="closeWindow('win-contact')"></button>
         <button class="win-dot win-max" onclick="toggleMax('win-contact')"></button>
       </div>
-      <div class="window-title">✉️ Contact_&_Références.app</div>
+      <div class="window-title">✉️ Contact & Références.app</div>
       <div style="width:36px;"></div>
     </div>
     <div class="window-body">
@@ -881,10 +1042,10 @@
         </div>
       </div>
       <div class="project-card" style="margin-bottom:0;">
-        <h3>Référence Académique</h3>
+        <h3>Références Académiques</h3>
         <p><strong>Prof. Xavier Balandraud</strong> — SIGMA Clermont</p>
-        <p style="font-size:13px; color:var(--text-muted);">xavier.balandraud@sigma-clermont.fr</p>
-        <p><strong>Prof. Milan Dvorak </strong> — Czech Technical University - Department of Aerospace Engineering </p>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">xavier.balandraud@sigma-clermont.fr</p>
+        <p><strong>Prof. Milan Dvořák</strong> — Czech Technical University (CTU Prague) — Head of Dept. of Aerospace Engineering</p>
         <p style="font-size:13px; color:var(--text-muted);">milan.dvorak@cvut.cz</p>
       </div>
     </div>
@@ -903,6 +1064,10 @@
     </div>
     <div class="window-body">
       <div class="project-card">
+        <h3>☀️ Projet de pseudo-satellite solaire (2026–2027)</h3>
+        <p>Développement actuel en dernière année à SIGMA Clermont autour des architectures stratosphériques / haute altitude à propulsion solaire.</p>
+      </div>
+      <div class="project-card">
         <h3>🎉 FizZteam — Association Étudiante (2025–2026)</h3>
         <p>Organisation d'événements et coordination logistique sur le campus de SIGMA Clermont : gestion d'équipe, budget et sens du collectif.</p>
       </div>
@@ -920,7 +1085,7 @@
   <!-- DOCK INFÉRIEUR -->
   <nav class="dock">
     <div class="dock-item" title="Accueil" onclick="openWindow('win-welcome')">👨‍🚀</div>
-    <div class="dock-item" title="Projets" onclick="openWindow('win-projects')">📁</div>
+    <div class="dock-item" title="Cursus & Projets" onclick="openWindow('win-projects')">📁</div>
     <div class="dock-item" title="Compétences" onclick="openWindow('win-skills')">📡</div>
     <div class="dock-item" title="CV" onclick="openWindow('win-cv')">📄</div>
     <div class="dock-item" title="Contact" onclick="openWindow('win-contact')">✉️</div>
@@ -932,6 +1097,17 @@
   <script>
     let currentLang = "fr";
     let topZ = 20;
+
+    function switchProjectTab(projIdx, tabIdx) {
+      for (let t = 0; t < 3; t++) {
+        const btn = document.getElementById(`tab-btn-${projIdx}-${t}`);
+        const panel = document.getElementById(`tab-panel-${projIdx}-${t}`);
+        if (btn && panel) {
+          btn.classList.toggle("active", t === tabIdx);
+          panel.classList.toggle("active", t === tabIdx);
+        }
+      }
+    }
 
     function renderLanguage() {
       const d = PORTFOLIO_DATA[currentLang];
@@ -957,15 +1133,44 @@
       postitList.innerHTML = d.postitItems.map(item => `<li>${item}</li>`).join("");
 
       const projContainer = document.getElementById("projects-container");
-      projContainer.innerHTML = d.projects.map(p => `
+      projContainer.innerHTML = d.projects.map((p, idx) => `
         <div class="project-card">
           <span class="project-tag">${p.tag}</span>
           <h3>${p.title}</h3>
-          <p style="font-size:13.5px; margin-bottom:8px;"><strong>${currentLang === 'fr' ? 'Contexte :' : 'Context:'}</strong> ${p.context}</p>
-          <p style="font-size:13.5px;"><strong>${currentLang === 'fr' ? 'Actions menées :' : 'Key Actions:'}</strong> ${p.actions}</p>
-          <div class="project-grid">
-            <div class="project-subbox"><strong>🛠️ ${currentLang === 'fr' ? 'Outils :' : 'Tools:'}</strong><br>${p.tools}</div>
-            <div class="project-subbox"><strong>🎯 ${currentLang === 'fr' ? 'Impact / Preuve :' : 'Impact / Proof:'}</strong><br>${p.result}</div>
+
+          <div class="kpi-grid">
+            ${p.kpis.map(k => `
+              <div class="kpi-box">
+                <div class="kpi-val">${k.val}</div>
+                <div class="kpi-lbl">${k.lbl}</div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="tab-bar">
+            <button class="tab-btn active" id="tab-btn-${idx}-0" onclick="switchProjectTab(${idx}, 0)">${d.tabs[0]}</button>
+            <button class="tab-btn" id="tab-btn-${idx}-1" onclick="switchProjectTab(${idx}, 1)">${d.tabs[1]}</button>
+            <button class="tab-btn" id="tab-btn-${idx}-2" onclick="switchProjectTab(${idx}, 2)">${d.tabs[2]}</button>
+          </div>
+
+          <div class="tab-panel active" id="tab-panel-${idx}-0">
+            <p style="margin-bottom:8px;"><strong>${currentLang === 'fr' ? 'Contexte & Enjeux :' : 'Context & Stakes:'}</strong> ${p.overview.context}</p>
+            <div class="project-grid">
+              <div class="project-subbox"><strong>🛠️ ${currentLang === 'fr' ? 'Environnement & Outils :' : 'Tools & Environment:'}</strong><br>${p.overview.tools}</div>
+              <div class="project-subbox"><strong>🎯 ${currentLang === 'fr' ? 'Livrables & Impact :' : 'Deliverables & Impact:'}</strong><br>${p.overview.impact}</div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tab-panel-${idx}-1">
+            <ul class="spec-list">
+              ${p.models.map(m => `<li>${m}</li>`).join("")}
+            </ul>
+          </div>
+
+          <div class="tab-panel" id="tab-panel-${idx}-2">
+            <ul class="spec-list">
+              ${p.proto.map(pr => `<li>${pr}</li>`).join("")}
+            </ul>
           </div>
         </div>
       `).join("");
@@ -996,7 +1201,7 @@
     function toggleMax(id) {
       const win = document.getElementById(id);
       if (win.style.width === "96vw") {
-        win.style.width = "680px";
+        win.style.width = "720px";
         win.style.height = "auto";
         win.style.top = "70px";
         win.style.left = "180px";
@@ -1019,7 +1224,6 @@
       alert(currentLang === "fr" ? "E-mail copié : " + PORTFOLIO_DATA.email : "Email copied: " + PORTFOLIO_DATA.email);
     }
 
-    // Déplacement fluide des fenêtres à la souris
     function startDrag(e, id) {
       if (window.innerWidth <= 768) return;
       const win = document.getElementById(id);
@@ -1040,14 +1244,6 @@
       document.addEventListener("mouseup", onUp);
     }
 
-    // Horloge en direct
     function updateClock() {
       const now = new Date();
-      document.getElementById("clock").textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-    renderLanguage();
-  </script>
-</body>
-</html>
+      document.getElementById("clock").textContent = now.toLocaleTimeString([], { hour: "2
