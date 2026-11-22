@@ -334,7 +334,7 @@
     }
 
     /* =====================================================================
-       6. COMPOSANTS INTERNES & ONGLETS PROJETS
+       6. COMPOSANTS INTERNES, ONGLETS & GALERIE PHOTOS
        ===================================================================== */
     .welcome-hero {
       display: flex;
@@ -523,27 +523,42 @@
       gap: 6px;
     }
 
+    /* Galerie multi-photos par projet */
+    .project-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
     .project-img-box {
-      margin-top: 12px;
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid var(--card-border);
       background: rgba(148, 163, 184, 0.08);
+      display: flex;
+      flex-direction: column;
     }
 
     .project-img-box img {
       width: 100%;
-      max-height: 240px;
+      height: 210px;
       object-fit: cover;
       display: block;
+      cursor: zoom-in;
+      transition: transform 0.25s ease;
+    }
+
+    .project-img-box img:hover {
+      transform: scale(1.03);
     }
 
     .project-img-caption {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--text-muted);
-      padding: 6px 10px;
+      padding: 6px 8px;
       text-align: center;
-      font-style: italic;
+      line-height: 1.35;
     }
 
     .skill-bar-wrap {
@@ -650,7 +665,7 @@
         flex-direction: column;
         text-align: center;
       }
-      .project-grid, .kpi-grid {
+      .project-grid, .kpi-grid, .project-gallery {
         grid-template-columns: 1fr;
       }
     }
@@ -698,8 +713,9 @@
           {
             tag: "Aéronautique Stratosphérique • Projet 3A SIGMA Clermont (2026–2027)",
             title: "Conception d'un Pseudo-Satellite Solaire Haute Altitude (HAPS)",
-            image: "projet-haps.jpg",
-            imageCaption: "Architecture structurale & bilan énergétique du pseudo-satellite solaire (HAPS)",
+            images: [
+              { src: "projet-haps.jpg", caption: "Architecture structurale & bilan énergétique du pseudo-satellite solaire (HAPS)" }
+            ],
             kpis: [
               { val: "Vol persistant", lbl: "Autonomie solaire jour/nuit" },
               { val: "Allègement", lbl: "Structures composites / CAO" },
@@ -723,8 +739,11 @@
           {
             tag: "R&D Aérospatiale & Métrologie • CTU Prague (17 sem. / 530h)",
             title: "Modélisation thermo-hygro-mécanique de capteurs à fibre optique (FBG)",
-            image: "projet-prague.jpg",
-            imageCaption: "Enceinte climatique ACS DY200 et banc de traction MTS Criterion 45 — CTU Prague",
+            images: [
+              { src: "Prague 1.jpg", caption: "Enceinte climatique ACS DY200 (cycles T / RH)" },
+              { src: "Prague 2.jpg", caption: "Volume d'essai interne de l'enceinte climatique" },
+              { src: "Prague 3.jpg", caption: "Banc de traction MTS Criterion 45 + chambre Thermcraft" }
+            ],
             kpis: [
               { val: "6 substrats", lbl: "Quartz à Al 7075" },
               { val: "1,98 pm/%RH", lbl: "Sensibilité RH prédite" },
@@ -749,8 +768,9 @@
           {
             tag: "Spatial & Robotique • Projet PERSEUS / CNES (Chef de projet • 8 ing.)",
             title: "Robot Multifonctions (RM) 6×6 d'intervention post-vol sur pas de tir",
-            image: "projet-perseus.jpg",
-            imageCaption: "Prototype assemblé du Robot Multifonctions 6×6 Rocker-Bogie — Projet PERSEUS / CNES",
+            images: [
+              { src: "projet-perseus.jpg", caption: "Prototype assemblé du Robot Multifonctions 6×6 Rocker-Bogie — Projet PERSEUS / CNES" }
+            ],
             kpis: [
               { val: "672 W / 14,8 Nm", lbl: "4× Brushless NEMA23" },
               { val: "19,14 MPa", lbl: "Von Mises Alu 5754" },
@@ -775,8 +795,7 @@
           {
             tag: "Industrialisation & Conception Avancée • SIGMA Clermont",
             title: "Optimisation topologique, composites & maîtrise des procédés aéronautiques",
-            image: "",
-            imageCaption: "",
+            images: [],
             kpis: [
               { val: "DFM / DFA", lbl: "Gammes & Montages" },
               { val: "Cp / Cpk", lbl: "MSP & AMDEC Process" },
@@ -828,8 +847,9 @@
           {
             tag: "Stratospheric Aeronautics • Final-Year Project SIGMA Clermont (2026–2027)",
             title: "Design of a High-Altitude Solar Pseudo-Satellite (HAPS)",
-            image: "projet-haps.jpg",
-            imageCaption: "Structural architecture & day/night energy balance of the solar HAPS",
+            images: [
+              { src: "projet-haps.jpg", caption: "Structural architecture & day/night energy balance of the solar HAPS" }
+            ],
             kpis: [
               { val: "Persistent Flight", lbl: "Day/Night Solar Endurance" },
               { val: "Lightweighting", lbl: "Composite Structures / CAD" },
@@ -853,8 +873,11 @@
           {
             tag: "Aerospace R&D & Metrology • CTU Prague (17 wks / 530h)",
             title: "Thermo-Hygro-Mechanical Modelling of Fiber Bragg Grating (FBG) Sensors",
-            image: "projet-prague.jpg",
-            imageCaption: "ACS DY200 climatic chamber & MTS Criterion Model 45 tensile bench — CTU Prague",
+            images: [
+              { src: "Prague 1.jpg", caption: "ACS DY200 climatic chamber (T / RH cycling)" },
+              { src: "Prague 2.jpg", caption: "Internal test volume of the climatic chamber" },
+              { src: "Prague 3.jpg", caption: "MTS Criterion Model 45 tensile bench + Thermcraft chamber" }
+            ],
             kpis: [
               { val: "6 Substrates", lbl: "Quartz to Al 7075" },
               { val: "1.98 pm/%RH", lbl: "Predicted RH Sensitivity" },
@@ -879,8 +902,9 @@
           {
             tag: "Space & Robotics • PERSEUS Project / CNES (Project Manager • 8 Eng.)",
             title: "6×6 Multifunctional Post-Launch Safety Rover for Launch-Pad Operations",
-            image: "projet-perseus.jpg",
-            imageCaption: "Assembled 6×6 Rocker-Bogie Multifunctional Rover prototype — PERSEUS / CNES",
+            images: [
+              { src: "projet-perseus.jpg", caption: "Assembled 6×6 Rocker-Bogie Multifunctional Rover prototype — PERSEUS / CNES" }
+            ],
             kpis: [
               { val: "672 W / 14.8 Nm", lbl: "4× Brushless NEMA23" },
               { val: "19.14 MPa", lbl: "Von Mises Al 5754" },
@@ -905,8 +929,7 @@
           {
             tag: "Manufacturing & Structural Design • SIGMA Clermont",
             title: "Topology Optimization, Composites & Aerospace Process Control",
-            image: "",
-            imageCaption: "",
+            images: [],
             kpis: [
               { val: "DFM / DFA", lbl: "Routing & Fixtures" },
               { val: "Cp / Cpk", lbl: "SPC & Process FMEA" },
@@ -1255,10 +1278,14 @@
             <ul class="spec-list">
               ${p.proto.map(pr => `<li>${pr}</li>`).join("")}
             </ul>
-            ${p.image ? `
-              <div class="project-img-box">
-                <img src="${p.image}" alt="${p.title}" onerror="this.parentElement.style.display='none';" />
-                <div class="project-img-caption">${p.imageCaption}</div>
+            ${p.images && p.images.length > 0 ? `
+              <div class="project-gallery">
+                ${p.images.map(img => `
+                  <div class="project-img-box">
+                    <img src="${img.src}" alt="${img.caption}" onclick="window.open('${img.src}', '_blank')" onerror="this.parentElement.style.display='none';" />
+                    <div class="project-img-caption">${img.caption}</div>
+                  </div>
+                `).join("")}
               </div>
             ` : ""}
           </div>
