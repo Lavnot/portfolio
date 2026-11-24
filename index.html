@@ -423,7 +423,6 @@
       color: var(--accent);
     }
 
-    /* Section dépliable "Mon Profil, Activités & Projets Futurs" */
     .profile-deep-dive {
       display: none;
       margin-top: 16px;
@@ -493,6 +492,33 @@
     .project-card h3 {
       font-size: 16px;
       margin-bottom: 10px;
+    }
+
+    /* Grille de sports dans Coulisses */
+    .sport-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .sport-item {
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+    }
+
+    .sport-item strong {
+      display: block;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .sport-item span {
+      color: var(--text-muted);
+      font-size: 11.5px;
     }
 
     .cap-grid {
@@ -752,7 +778,7 @@
         flex-direction: column;
         text-align: center;
       }
-      .project-grid, .kpi-grid, .project-gallery, .cap-grid {
+      .project-grid, .kpi-grid, .project-gallery, .cap-grid, .sport-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -795,7 +821,7 @@
             items: [
               "<strong>Aéronautique & Espace :</strong> Développement d'un <strong>pseudo-satellite solaire (HAPS)</strong> en projet de fin d'études, membre actif d'<strong>Aérosigma</strong> et titulaire du <strong>BIA</strong> (Brevet d'Initiation Aéronautique).",
               "<strong>Leadership & Vie associative :</strong> Responsable d'équipe chez <strong>FizZteam</strong> (gestion du foyer étudiant de SIGMA Clermont, coordination d'une équipe de 32 personnes, budget et événements).",
-              "<strong>Équilibre & Terrain :</strong> Pratique régulière des sports de plein air et expériences concrètes de terrain (relation client et digitalisation chez Bab'Kasia)."
+              "<strong>Sport & Endurance :</strong> Pratique régulière de la <strong>course à pied et du trail</strong> (après des années de <strong>judo — ceinture marron</strong> et de <strong>badminton en compétition départementale</strong>)."
             ]
           },
           {
@@ -821,7 +847,28 @@
           contact: "✉️ Contact & Réf",
           trash: "🗑️ Coulisses"
         },
-        skillsIntro: "Capacités opérationnelles acquises et validées à travers mes projets, stages et engagements :",
+        trashTitle: "🗑️ Coulisses_&_Engagements.log",
+        trashCards: [
+          {
+            title: "🏔️ Sport, Compétition & Endurance",
+            desc: "Le sport occupe une place centrale dans mon équilibre, m'ayant forgé le goût de l'effort, la rigueur et la gestion du stress :",
+            sports: [
+              { name: "🏃 Course à pied & Trail (Actuel)", detail: "Pratique régulière en extérieur et en montagne — endurance et dépassement de soi" },
+              { name: "🥋 Judo — Ceinture Marron", detail: "Pratique approfondie durant ma jeunesse — discipline, respect et maîtrise technique" },
+              { name: "🏸 Badminton — Niveau Départemental", detail: "Compétition en club — réactivité, précision et tactique" },
+              { name: "✈️ Aéronautique (BIA & Aérosigma)", detail: "Culture aéronautique & spatiale, conférences et projets étudiants" }
+            ]
+          },
+          {
+            title: "🎉 FizZteam — Responsable d'équipe (2025–Présent)",
+            desc: "Gestion du foyer des étudiants, organisation d'événements et restauration sur le campus de SIGMA Clermont : coordination d'une équipe de <strong>32 personnes</strong>, gestion financière et adaptabilité."
+          },
+          {
+            title: "🛰️ Aérosigma — Association Aéronautique & Spatiale (2024–2025)",
+            desc: "Participation active aux activités et conférences du secteur aéronautique/aérospatial à SIGMA Clermont, et prospection de partenariats associatifs pour le projet PERSEUS."
+          }
+        ],
+        skillsIntro: "Capacités opérationnelles acquises et validées à travers mes projets, stages et engagements (source : expériences & LinkedIn) :",
         capabilities: [
           {
             icon: "📐",
@@ -1052,7 +1099,7 @@
             items: [
               "<strong>Aeronautics & Space:</strong> Designing a <strong>High-Altitude Solar Pseudo-Satellite (HAPS)</strong> as my final-year engineering project, active member of <strong>Aérosigma</strong>, and holder of the French <strong>BIA</strong> aeronautics certificate.",
               "<strong>Leadership & Student Life:</strong> Team Leader at <strong>FizZteam</strong> (managing the SIGMA Clermont student hub, coordinating a 32-person team, finances, and campus events).",
-              "<strong>Outdoor & Field Balance:</strong> Regular outdoor sports practitioner and hands-on field experience in retail operations and web deployment (Bab'Kasia)."
+              "<strong>Sports & Endurance:</strong> Regular <strong>running and trail running</strong> practitioner (building on a background in <strong>Judo — Brown Belt</strong> and <strong>departmental-level competitive Badminton</strong>)."
             ]
           },
           {
@@ -1078,6 +1125,27 @@
           contact: "✉️ Contact & Ref",
           trash: "🗑️ Behind_Scenes"
         },
+        trashTitle: "🗑️ Behind_the_Scenes_&_Sports.log",
+        trashCards: [
+          {
+            title: "🏔️ Sports, Competition & Endurance",
+            desc: "Sports play a central role in my personal balance, building discipline, resilience, and composure under pressure:",
+            sports: [
+              { name: "🏃 Running & Trail Running (Current)", detail: "Regular outdoor and mountain trail running — endurance and mental grit" },
+              { name: "🥋 Judo — Brown Belt", detail: "Extensive youth training — discipline, respect, and technical control" },
+              { name: "🏸 Badminton — Departmental Level", detail: "Club competition — agility, precision, and tactical focus" },
+              { name: "✈️ Aeronautics (BIA & Aérosigma)", detail: "Aerospace culture, technical talks, and student engineering initiatives" }
+            ]
+          },
+          {
+            title: "🎉 FizZteam — Student Team Leader (2025–Present)",
+            desc: "Managing the SIGMA Clermont student hub, campus events, and catering: leading a <strong>32-person team</strong>, overseeing finances, and ensuring agile logistics."
+          },
+          {
+            title: "🛰️ Aérosigma — Aerospace Student Club (2024–2025)",
+            desc: "Active participation in aerospace workshops and conferences at SIGMA Clermont, plus industrial/club outreach for the PERSEUS space rover project."
+          }
+        ],
         skillsIntro: "Operational capabilities demonstrated across engineering projects, research internships, and leadership roles:",
         capabilities: [
           {
@@ -1347,31 +1415,18 @@
     </aside>
   </main>
 
-  <!-- FENÊTRE COULISSES (EN HAUT À DROITE) -->
-  <section class="window" id="win-trash" style="top: 46px; right: 24px; width: 540px;">
+  <!-- FENÊTRE COULISSES (EN HAUT À DROITE — BILINGUE) -->
+  <section class="window" id="win-trash" style="top: 46px; right: 24px; width: 620px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-trash')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-trash')"></button>
         <button class="win-dot win-min" onclick="closeWindow('win-trash')"></button>
         <button class="win-dot win-max" onclick="toggleMax('win-trash')"></button>
       </div>
-      <div class="window-title">🗑️ Coulisses_&_Engagements.log</div>
+      <div class="window-title" id="trash-win-title">🗑️ Coulisses_&_Engagements.log</div>
       <div style="width:36px;"></div>
     </div>
-    <div class="window-body">
-      <div class="project-card">
-        <h3>🎉 FizZteam — Responsable d'équipe (2025–Présent)</h3>
-        <p>Gestion du foyer des étudiants, organisation d'événements et restauration sur le campus de SIGMA Clermont : coordination d'une équipe de <strong>32 personnes</strong>, gestion financière et adaptabilité.</p>
-      </div>
-      <div class="project-card">
-        <h3>✈️ Aérosigma — Association Aéronautique & Spatiale (2024–2025)</h3>
-        <p>Participation active aux activités et conférences du secteur aéronautique/aérospatial à SIGMA Clermont, et prospection de partenariats associatifs pour le projet PERSEUS.</p>
-      </div>
-      <div class="project-card" style="margin-bottom:0;">
-        <h3>🏔️ Centres d'intérêt</h3>
-        <p>Aéronautique (titulaire du BIA) et pratique régulière des sports de plein air.</p>
-      </div>
-    </div>
+    <div class="window-body" id="trash-container"></div>
   </section>
 
   <!-- FENÊTRE 1 : ACCUEIL INCARNÉ + PROFIL DÉTAILLÉ & PROJETS FUTURS -->
@@ -1553,7 +1608,6 @@
       document.getElementById("btn-projects").textContent = d.btnProjects;
       document.getElementById("btn-cv").textContent = d.btnCV;
 
-      // Rendu de la section détaillée Profil, Activités & Projets Futurs
       const profContainer = document.getElementById("profile-sections-container");
       profContainer.innerHTML = d.profileSections.map(sec => `
         <div class="profile-box">
@@ -1568,6 +1622,26 @@
       document.getElementById("postit-title").textContent = d.postitTitle;
       const postitList = document.getElementById("postit-list");
       postitList.innerHTML = d.postitItems.map(item => `<li>${item}</li>`).join("");
+
+      // Rendu de la fenêtre Coulisses (Sport, Engagements & Passions)
+      document.getElementById("trash-win-title").textContent = d.trashTitle;
+      const trashContainer = document.getElementById("trash-container");
+      trashContainer.innerHTML = d.trashCards.map((card, i) => `
+        <div class="project-card" style="${i === d.trashCards.length - 1 ? 'margin-bottom:0;' : ''}">
+          <h3>${card.title}</h3>
+          <p>${card.desc}</p>
+          ${card.sports ? `
+            <div class="sport-grid">
+              ${card.sports.map(s => `
+                <div class="sport-item">
+                  <strong>${s.name}</strong>
+                  <span>${s.detail}</span>
+                </div>
+              `).join("")}
+            </div>
+          ` : ""}
+        </div>
+      `).join("");
 
       const skillsContainer = document.getElementById("skills-container");
       skillsContainer.innerHTML = `
