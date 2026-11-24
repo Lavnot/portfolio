@@ -193,7 +193,6 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
-    /* Corbeille épinglée en haut à droite */
     .trash-icon-top-right {
       position: fixed;
       top: 56px;
@@ -269,7 +268,7 @@
        ===================================================================== */
     .window {
       position: absolute;
-      width: 720px;
+      width: 740px;
       max-width: 94vw;
       max-height: 82vh;
       background: var(--glass-bg);
@@ -342,7 +341,7 @@
     }
 
     /* =====================================================================
-       6. COMPOSANTS INTERNES, ONGLETS & GALERIE PHOTOS
+       6. COMPOSANTS INTERNES, ONGLETS, COMPÉTENCES & GALERIE
        ===================================================================== */
     .welcome-hero {
       display: flex;
@@ -446,6 +445,61 @@
     .project-card h3 {
       font-size: 16px;
       margin-bottom: 10px;
+    }
+
+    /* Grille de capacités détaillées liées aux expériences */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .cap-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cap-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .cap-bullets {
+      padding-left: 16px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cap-bullets strong {
+      color: var(--text-main);
+    }
+
+    .cap-proof {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 9px;
+      border-radius: 6px;
+      display: inline-block;
+      align-self: flex-start;
+      cursor: pointer;
+    }
+
+    .cap-proof:hover {
+      text-decoration: underline;
     }
 
     .tab-bar {
@@ -568,36 +622,11 @@
       line-height: 1.35;
     }
 
-    .skill-bar-wrap {
-      margin-bottom: 12px;
-    }
-
-    .skill-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .skill-track {
-      height: 8px;
-      background: rgba(148, 163, 184, 0.25);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .skill-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 999px;
-    }
-
     .tag-cloud {
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .chip {
@@ -676,7 +705,7 @@
         flex-direction: column;
         text-align: center;
       }
-      .project-grid, .kpi-grid, .project-gallery {
+      .project-grid, .kpi-grid, .project-gallery, .cap-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -719,6 +748,79 @@
           contact: "✉️ Contact & Réf",
           trash: "🗑️ Coulisses"
         },
+        skillsIntro: "Capacités opérationnelles acquises et validées à travers mes projets, stages et engagements (source : expériences & LinkedIn) :",
+        capabilities: [
+          {
+            icon: "📐",
+            title: "Conception Mécanique, CFAO & Simulation (FEA)",
+            items: [
+              "<strong>CFAO / IAO & Tôlerie :</strong> Modélisation volumique, assemblages complexes, tôlerie mécano-pliée et mises en plan cotées (3DEXPERIENCE, CATIA V5, SolidWorks).",
+              "<strong>Dimensionnement & FEA :</strong> Calculs de contraintes Von Mises, flexion/cisaillement RDM (axes, roulements 608 RS, liaisons pivot), optimisation topologique (ANSYS, Inspire).",
+              "<strong>Matériaux & Assemblages :</strong> Alliages aéronautiques (Alu 5754/7075, Invar, Acier S235), composites CFRP, polymères (thermoformage, injection), assemblages vissés, collés et soudés TIG/MIG."
+            ],
+            proof: "🔗 Preuves : Rover PERSEUS (CNES) & Pseudo-Satellite HAPS"
+          },
+          {
+            icon: "🔬",
+            title: "Caractérisation Mécanique, Essais & Modélisation",
+            items: [
+              "<strong>Modélisation multi-physique :</strong> Découplage thermo-hygro-mécanique, transfert de déformation (modèle <em>shear-lag</em> de Cox) et bilans énergétiques.",
+              "<strong>Test mécanique & Métrologie :</strong> Capteurs à fibre optique (FBG), jauges résistives, enceinte climatique (ACS DY200), bancs de traction (MTS Criterion), sondes PT100.",
+              "<strong>Rigueur expérimentale :</strong> Rédaction de protocoles d'essais normalisés, valeurs de contrôle prédictives avant essai et propagation des incertitudes (GUM Type A & B)."
+            ],
+            proof: "🔗 Preuve : Stage Recherche Aérospatiale — CTU Prague"
+          },
+          {
+            icon: "🏭",
+            title: "Procédés de Fabrication, Industrialisation & Qualité",
+            items: [
+              "<strong>Procédés & Industrialisation :</strong> Rédaction de gammes d'usinage, transfert de cotes, conception de montages d'usinage (DFM/DFA) et sécurité machines (ISO 13849).",
+              "<strong>Prototypage multi-procédés :</strong> Découpe laser (métal & bois), pliage sur presse CNC (DURMA), tournage, impression 3D industrielle (certifié Institut Mines-Télécom).",
+              "<strong>Maîtrise de la qualité :</strong> Analyse de risques AMDEC Process, Plans d'Expériences (DOE), analyse causes racines et Maîtrise Statistique des Procédés (MSP, Cp/Cpk)."
+            ],
+            proof: "🔗 Preuves : Cursus SIGMA Clermont & Prototypage PERSEUS"
+          },
+          {
+            icon: "🤖",
+            title: "Robotique Mobile, Systèmes Embarqués & Énergie",
+            items: [
+              "<strong>Architecture Maître/Esclave :</strong> Pilotage haut niveau sous Linux (Raspberry Pi 5) couplé à un microcontrôleur temps réel (Teensy 4.1) via liaison série.",
+              "<strong>Actionneurs & Sécurité :</strong> Commande PWM de moteurs Brushless et servomoteurs (ponts en H BTS7960), Watchdog matériel (500 ms) et télémétrie RF (LoRa / Crossfire 868 MHz).",
+              "<strong>Énergie & Robotique :</strong> Bilans de puissance, dimensionnement de packs batteries LiFePO4 (−20 °C), programmation hors-ligne sous RoboDK et automates (GRAFCET / IEC 61131)."
+            ],
+            proof: "🔗 Preuves : Architecture Rover PERSEUS & TP Robotique"
+          },
+          {
+            icon: "💻",
+            title: "Calcul Scientifique, Data / IA & Documentation",
+            items: [
+              "<strong>Développement & IHM :</strong> Scripts Python (acquisition capteurs, interface de télémétrie <code>pygame</code>, contrôle GPIO <code>pigpio</code>) et débogage distant (VS Code Remote-SSH).",
+              "<strong>Data, Probabilités & IA :</strong> Traitement statistique de campagnes d'essais sous MATLAB/Python, bases en Machine Learning & Deep Learning (SIGMA), maîtrise du Prompting et Pack Office.",
+              "<strong>Rédaction scientifique :</strong> Rédaction de rapports techniques structurés en LaTeX (Overleaf) et de Notes Techniques conformes aux standards du CNES."
+            ],
+            proof: "🔗 Preuves : Rapport CTU Prague (52 p. LaTeX) & Code PERSEUS"
+          },
+          {
+            icon: "🧭",
+            title: "Management d'Équipe & Compétences Relationnelles",
+            items: [
+              "<strong>Leadership & Gestion de projet :</strong> Responsable d'équipe associative (32 personnes chez FizZteam, gestion financière et événementielle) et chef de projet PERSEUS (8 ingénieurs, 6 jalons CNES).",
+              "<strong>Communication interculturelle :</strong> Travail quotidien en anglais scientifique et technique en laboratoire européen (Prague), autonomie et prise d'initiative.",
+              "<strong>Relation client & Polyvalence :</strong> Accueil, conseil, gestion des stocks, suivi de commandes et création de site web vitrine (Bab'Kasia), partenariats associatifs (Aérosigma)."
+            ],
+            proof: "🔗 Preuves : FizZteam (32 pers.), PERSEUS, CTU Prague & Bab'Kasia"
+          }
+        ],
+        skillsToolsLabel: "LICENCES, CERTIFICATIONS & LANGUES",
+        skillsChips: [
+          "🏭 Fabrication Additive : L'impression 3D dans l'industrie — IMT (Nov. 2026 • ID: AFN93UTHXVDI)",
+          "✈️ BIA — Brevet d'Initiation Aéronautique (État Français)",
+          "🛡️ Certifié Sécurité INRS",
+          "🚗 Permis B",
+          "🇫🇷 Français (Langue maternelle)",
+          "🇬🇧 Anglais (Capacité professionnelle fonctionnelle — B2)",
+          "🇩🇪 Allemand (Capacité professionnelle limitée — B1)"
+        ],
         tabs: ["📋 Vue d'ensemble", "📐 Calculs & Modèles", "🔬 Prototypage & Bilan"],
         projects: [
           {
@@ -877,6 +979,79 @@
           contact: "✉️ Contact & Ref",
           trash: "🗑️ Behind_Scenes"
         },
+        skillsIntro: "Operational capabilities demonstrated across engineering projects, research internships, and leadership roles (from LinkedIn & project reports):",
+        capabilities: [
+          {
+            icon: "📐",
+            title: "Mechanical Design, CAD/CAM & FEA Simulation",
+            items: [
+              "<strong>3D CAD & Sheet Metal:</strong> Solid modelling, complex assemblies, sheet-metal bending, and GD&T technical drawings (3DEXPERIENCE, CATIA V5, SolidWorks).",
+              "<strong>Structural Sizing & FEA:</strong> Von Mises static stress analysis, analytical beam/shaft mechanics (bearings, circlips, pivot joints), topology optimization (ANSYS, Altair Inspire).",
+              "<strong>Materials & Joining:</strong> Aerospace alloys (Al 5754/7075, Invar, S235 steel), CFRP composites, polymer processing (thermoforming, injection), bolted, bonded & TIG/MIG welded joints."
+            ],
+            proof: "🔗 Proven on: PERSEUS Rover (CNES) & Solar HAPS Project"
+          },
+          {
+            icon: "🔬",
+            title: "Mechanical Characterization, Testing & Modelling",
+            items: [
+              "<strong>Multi-Physics Modelling:</strong> Thermo-hygro-mechanical decoupling, strain-transfer mechanics (Cox <em>shear-lag</em> model), and day/night energy balances.",
+              "<strong>Mechanical Testing & Metrology:</strong> Fiber Bragg Grating (FBG) optical sensors, resistive strain gauges, climatic chamber (ACS DY200), tensile testing (MTS Criterion), 4-wire PT100 probes.",
+              "<strong>Experimental Rigor:</strong> Standardized test protocol authoring, predictive control benchmarks prior to testing, and GUM uncertainty propagation (Type A & B)."
+            ],
+            proof: "🔗 Proven on: Aerospace Research Internship — CTU Prague"
+          },
+          {
+            icon: "🏭",
+            title: "Manufacturing Processes, Industrialization & Quality",
+            items: [
+              "<strong>Manufacturing Engineering:</strong> Machining process routing, tolerance stack-up analysis, machining fixture design (DFM/DFA), and machine safety compliance (ISO 13849).",
+              "<strong>Multi-Process Prototyping:</strong> Laser cutting (metal & wood), CNC press-brake bending (DURMA), lathe turning, industrial 3D printing (certified by Institut Mines-Télécom).",
+              "<strong>Quality & Process Control:</strong> Process FMEA (AMDEC), Design of Experiments (DOE), root cause analysis, and Statistical Process Control (SPC, Cp/Cpk)."
+            ],
+            proof: "🔗 Proven on: SIGMA Clermont Curriculum & PERSEUS Build"
+          },
+          {
+            icon: "🤖",
+            title: "Mobile Robotics, Embedded Systems & Power",
+            items: [
+              "<strong>Master/Slave Architecture:</strong> High-level Linux control (Raspberry Pi 5) interfaced via serial link with a real-time microcontroller (Teensy 4.1).",
+              "<strong>Actuation & Safety:</strong> PWM control of Brushless motors and servos (BTS7960 H-bridges), hardware Watchdog safety (500 ms), and long-range RF telemetry (LoRa / Crossfire 868 MHz).",
+              "<strong>Energy & Robotics:</strong> Power budgets, LiFePO4 battery pack sizing (−20 °C), off-line robotic cell programming (RoboDK), and PLC automation (GRAFCET / IEC 61131)."
+            ],
+            proof: "🔗 Proven on: PERSEUS Rover Architecture & Robotics Labs"
+          },
+          {
+            icon: "💻",
+            title: "Scientific Computing, Data / AI & Documentation",
+            items: [
+              "<strong>Software & HMI:</strong> Python scripting (sensor acquisition, <code>pygame</code> telemetry UI, <code>pigpio</code> hardware PWM) and remote SSH debugging (VS Code Remote-SSH).",
+              "<strong>Data, Statistics & AI:</strong> Statistical test-campaign processing in MATLAB/Python, Machine Learning & Deep Learning foundations (SIGMA), Prompting, and MS Office.",
+              "<strong>Technical Authoring:</strong> Structured scientific reporting in LaTeX (Overleaf) and formal Technical Notes compliant with CNES aerospace standards."
+            ],
+            proof: "🔗 Proven on: CTU Prague Report (52p LaTeX) & PERSEUS Code"
+          },
+          {
+            icon: "🧭",
+            title: "Team Leadership & Transferable Skills",
+            items: [
+              "<strong>Leadership & Project Management:</strong> Student association Team Leader (32-person team at FizZteam, budget & event management) and PERSEUS Project Lead (8 engineers, 6 CNES milestones).",
+              "<strong>Intercultural Communication:</strong> Daily scientific and technical collaboration in English at a European research institute (Prague), autonomous execution, and initiative.",
+              "<strong>Customer Care & Adaptability:</strong> Storefront sales, inventory control, order logistics, website deployment (Bab'Kasia), and aerospace club partnerships (Aérosigma)."
+            ],
+            proof: "🔗 Proven on: FizZteam (32 ppl), PERSEUS, CTU Prague & Bab'Kasia"
+          }
+        ],
+        skillsToolsLabel: "LICENSES, CERTIFICATIONS & LANGUAGES",
+        skillsChips: [
+          "🏭 Additive Manufacturing: 3D Printing in Industry — IMT (Nov. 2026 • ID: AFN93UTHXVDI)",
+          "✈️ BIA — French Aeronautics Initiation Certificate",
+          "🛡️ INRS Workplace Safety Certified",
+          "🚗 Driver's License (Category B)",
+          "🇫🇷 French (Native)",
+          "🇬🇧 English (Full Professional Working Proficiency — B2)",
+          "🇩🇪 German (Limited Working Proficiency — B1)"
+        ],
         tabs: ["📋 Overview", "📐 Models & Calculations", "🔬 Prototyping & Review"],
         projects: [
           {
@@ -1073,7 +1248,7 @@
     </aside>
   </main>
 
-  <!-- FENÊTRE COULISSES (POSITIONNÉE EN HAUT À DROITE) -->
+  <!-- FENÊTRE COULISSES (EN HAUT À DROITE) -->
   <section class="window" id="win-trash" style="top: 46px; right: 24px; width: 540px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-trash')">
       <div class="window-controls">
@@ -1086,12 +1261,16 @@
     </div>
     <div class="window-body">
       <div class="project-card">
-        <h3>🎉 FizZteam — Association Étudiante (2025–2026)</h3>
-        <p>Organisation d'événements et coordination logistique sur le campus de SIGMA Clermont : gestion d'équipe, budget et sens du collectif.</p>
+        <h3>🎉 FizZteam — Responsable d'équipe (2025–Présent)</h3>
+        <p>Gestion du foyer des étudiants, organisation d'événements et restauration sur le campus de SIGMA Clermont : coordination d'une équipe de <strong>32 personnes</strong>, gestion financière et adaptabilité.</p>
+      </div>
+      <div class="project-card">
+        <h3>✈️ Aérosigma — Association Aéronautique & Spatiale (2024–2025)</h3>
+        <p>Participation active aux activités et conférences du secteur aéronautique/aérospatial à SIGMA Clermont, et prospection de partenariats associatifs pour le projet PERSEUS.</p>
       </div>
       <div class="project-card" style="margin-bottom:0;">
         <h3>🏔️ Centres d'intérêt</h3>
-        <p>Aéronautique (membre actif d'associations spécialisées, titulaire du BIA) et pratique régulière des sports de plein air.</p>
+        <p>Aéronautique (titulaire du BIA) et pratique régulière des sports de plein air.</p>
       </div>
     </div>
   </section>
@@ -1140,46 +1319,18 @@
     <div class="window-body" id="projects-container"></div>
   </section>
 
-  <!-- FENÊTRE 3 : COMPÉTENCES -->
-  <section class="window" id="win-skills" style="top: 110px; left: 260px;">
+  <!-- FENÊTRE 3 : COMPÉTENCES DÉTAILLÉES LIÉES AUX EXPÉRIENCES -->
+  <section class="window" id="win-skills" style="top: 76px; left: 210px; width: 800px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-skills')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-skills')"></button>
         <button class="win-dot win-min" onclick="closeWindow('win-skills')"></button>
         <button class="win-dot win-max" onclick="toggleMax('win-skills')"></button>
       </div>
-      <div class="window-title">📡 Matrice_Compétences_Ingénieur.app</div>
+      <div class="window-title">📡 Capacités_&_Compétences.app</div>
       <div style="width:36px;"></div>
     </div>
-    <div class="window-body">
-      <div class="skill-bar-wrap">
-        <div class="skill-label"><span>CAO & Simulation (CATIA V5, 3DEXPERIENCE, SolidWorks, ANSYS, Inspire)</span><span>90%</span></div>
-        <div class="skill-track"><div class="skill-fill" style="width:90%"></div></div>
-      </div>
-      <div class="skill-bar-wrap">
-        <div class="skill-label"><span>Instrumentation, Essais & Data (FBG, MTS Criterion, ACS, Python, MATLAB)</span><span>88%</span></div>
-        <div class="skill-track"><div class="skill-fill" style="width:88%"></div></div>
-      </div>
-      <div class="skill-bar-wrap">
-        <div class="skill-label"><span>Industrialisation & Qualité (DFM/DFA, Gammes usinage, AMDEC, MSP Cp/Cpk)</span><span>85%</span></div>
-        <div class="skill-track"><div class="skill-fill" style="width:85%"></div></div>
-      </div>
-      <div class="skill-bar-wrap">
-        <div class="skill-label"><span>Systèmes Embarqués & Robotique (Raspberry Pi, Teensy, RoboDK, GRAFCET)</span><span>82%</span></div>
-        <div class="skill-track"><div class="skill-fill" style="width:82%"></div></div>
-      </div>
-
-      <h4 style="margin-top:16px; font-size:13px; color:var(--text-muted);">CERTIFICATIONS & LANGUES</h4>
-      <div class="tag-cloud">
-        <span class="chip">✈️ BIA (Brevet d'Initiation Aéronautique)</span>
-        <span class="chip">🏭 Fabrication Additive (IMT)</span>
-        <span class="chip">🛡️ Certifié INRS</span>
-        <span class="chip">🚗 Permis B</span>
-        <span class="chip">🇫🇷 Français (Natif)</span>
-        <span class="chip">🇬🇧 Anglais (B2 Professionnel)</span>
-        <span class="chip">🇩🇪 Allemand (B1)</span>
-      </div>
-    </div>
+    <div class="window-body" id="skills-container"></div>
   </section>
 
   <!-- FENÊTRE 4 : CV & TÉLÉCHARGEMENT -->
@@ -1292,6 +1443,28 @@
       const postitList = document.getElementById("postit-list");
       postitList.innerHTML = d.postitItems.map(item => `<li>${item}</li>`).join("");
 
+      const skillsContainer = document.getElementById("skills-container");
+      skillsContainer.innerHTML = `
+        <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:14px;">${d.skillsIntro}</p>
+        <div class="cap-grid">
+          ${d.capabilities.map(c => `
+            <div class="cap-card">
+              <div>
+                <div class="cap-title">${c.icon} ${c.title}</div>
+                <ul class="cap-bullets">
+                  ${c.items.map(item => `<li>${item}</li>`).join("")}
+                </ul>
+              </div>
+              <span class="cap-proof" onclick="openWindow('win-projects')">${c.proof}</span>
+            </div>
+          `).join("")}
+        </div>
+        <h4 style="margin-top:16px; font-size:12.5px; color:var(--text-muted); letter-spacing:0.4px;">${d.skillsToolsLabel}</h4>
+        <div class="tag-cloud">
+          ${d.skillsChips.map(chip => `<span class="chip">${chip}</span>`).join("")}
+        </div>
+      `;
+
       const projContainer = document.getElementById("projects-container");
       projContainer.innerHTML = d.projects.map((p, idx) => `
         <div class="project-card">
@@ -1371,7 +1544,7 @@
     function toggleMax(id) {
       const win = document.getElementById(id);
       if (win.style.width === "96vw") {
-        win.style.width = "720px";
+        win.style.width = "740px";
         win.style.height = "auto";
         win.style.top = "70px";
         win.style.left = "180px";
