@@ -341,7 +341,7 @@
     }
 
     /* =====================================================================
-       6. COMPOSANTS INTERNES, ONGLETS, COMPÉTENCES & GALERIE
+       6. COMPOSANTS INTERNES, PROFIL DÉTAILLÉ, ONGLETS & GALERIE
        ===================================================================== */
     .welcome-hero {
       display: flex;
@@ -351,7 +351,7 @@
       border: 1px solid var(--card-border);
       padding: 16px;
       border-radius: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .avatar-wrap {
@@ -380,7 +380,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 14px;
+      margin-top: 12px;
     }
 
     .btn-primary {
@@ -423,6 +423,54 @@
       color: var(--accent);
     }
 
+    /* Section dépliable "Mon Profil, Activités & Projets Futurs" */
+    .profile-deep-dive {
+      display: none;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+      animation: popIn 0.22s ease-out;
+    }
+
+    .profile-deep-dive.open {
+      display: block;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .profile-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .profile-box h4 {
+      font-size: 14.5px;
+      color: var(--accent);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .profile-box p, .profile-box li {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    .profile-box ul {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
     .project-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -447,7 +495,6 @@
       margin-bottom: 10px;
     }
 
-    /* Grille de capacités détaillées liées aux expériences */
     .cap-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -730,10 +777,36 @@
         welcomeTitle: "Bonjour et bienvenue sur mon bureau virtuel !",
         welcomeSub: "Tom Darsonval • Élève-Ingénieur Mécanique & Robotique (SIGMA Clermont)",
         welcomeText:
-          "Je conçois, modélise et valide des systèmes mécaniques et instrumentés pour l'aéronautique, le spatial et la robotique. Explorez mes dossiers techniques (avec calculs, modèles et bilans réflexifs) ou lancez la visite guidée.",
-        btnTour: "🚀 Visite guidée (30 sec)",
+          "Je conçois, modélise et valide des systèmes mécaniques et instrumentés pour l'aéronautique, le spatial et la robotique. Découvrez mon parcours, mes activités et mes projets futurs ci-dessous, ou explorez directement mes dossiers techniques.",
+        btnProfile: "👤 En savoir plus sur moi & mes projets futurs",
+        btnProfileClose: "🔼 Réduire mon profil détaillé",
         btnProjects: "📁 Explorer Cursus & Projets",
         btnCV: "📄 Ouvrir mon CV",
+        profileSections: [
+          {
+            title: "🎓 Mon Profil & Parcours d'Ingénieur",
+            type: "text",
+            content:
+              "Actuellement en dernière année du cycle ingénieur à <strong>SIGMA Clermont</strong> (filière <em>Machines, Robots et Systèmes</em>, spécialisation Procédés & Industrialisation) après une classe préparatoire <strong>PT*</strong> au Lycée Henri Loritz (Nancy), je me passionne pour la conception mécanique robuste, la simulation par éléments finis et l'intégration de systèmes complexes en environnements exigeants."
+          },
+          {
+            title: "⚙️ Mes Activités & Engagements Actuels",
+            type: "list",
+            items: [
+              "<strong>Aéronautique & Espace :</strong> Développement d'un <strong>pseudo-satellite solaire (HAPS)</strong> en projet de fin d'études, membre actif d'<strong>Aérosigma</strong> et titulaire du <strong>BIA</strong> (Brevet d'Initiation Aéronautique).",
+              "<strong>Leadership & Vie associative :</strong> Responsable d'équipe chez <strong>FizZteam</strong> (gestion du foyer étudiant de SIGMA Clermont, coordination d'une équipe de 32 personnes, budget et événements).",
+              "<strong>Équilibre & Terrain :</strong> Pratique régulière des sports de plein air et expériences concrètes de terrain (relation client et digitalisation chez Bab'Kasia)."
+            ]
+          },
+          {
+            title: "🚀 Mes Projets Futurs & Ambitions (2027+)",
+            type: "list",
+            items: [
+              "<strong>Objectif court terme — Stage PFE (15 mars au 25 septembre 2027) :</strong> Intégrer une équipe R&D, Bureau d'Études Structures, Essais ou Industrialisation dans le secteur <strong>aéronautique, spatial ou robotique de pointe</strong> (France ou Europe).",
+              "<strong>Ambition d'ingénieur :</strong> Contribuer à la conception et à la qualification des prochaines générations de lanceurs réutilisables, de plateformes stratosphériques ou de structures aéronautiques allégées et instrumentées (Structural Health Monitoring)."
+            ]
+          }
+        ],
         postitTitle: "📌 En ce moment",
         postitItems: [
           "📍 Basé à Clermont-Ferrand (SIGMA Clermont)",
@@ -748,7 +821,7 @@
           contact: "✉️ Contact & Réf",
           trash: "🗑️ Coulisses"
         },
-        skillsIntro: "Capacités opérationnelles acquises et validées à travers mes projets, stages et engagements (source : expériences & LinkedIn) :",
+        skillsIntro: "Capacités opérationnelles acquises et validées à travers mes projets, stages et engagements :",
         capabilities: [
           {
             icon: "📐",
@@ -961,10 +1034,36 @@
         welcomeTitle: "Hello and welcome to my virtual workspace!",
         welcomeSub: "Tom Darsonval • Final-Year Mechanical & Robotics Engineering Student (SIGMA Clermont)",
         welcomeText:
-          "I design, model, and validate mechanical and instrumented systems for aerospace, space, and robotics. Explore my engineering case studies (including analytical models, FEA results, and prototyping) or start the guided tour.",
-        btnTour: "🚀 30-Sec Guided Tour",
+          "I design, model, and validate mechanical and instrumented systems for aerospace, space, and robotics. Learn more about my background, activities, and future projects below, or explore my technical case studies directly.",
+        btnProfile: "👤 About Me, Activities & Future Projects",
+        btnProfileClose: "🔼 Collapse Detailed Profile",
         btnProjects: "📁 Explore Curriculum & Projects",
         btnCV: "📄 Open Resume",
+        profileSections: [
+          {
+            title: "🎓 Profile & Engineering Background",
+            type: "text",
+            content:
+              "Currently a final-year engineering student at <strong>SIGMA Clermont</strong> (<em>Machines, Robots & Systems</em> track, specializing in Manufacturing Processes & Industrialization) following an intensive <strong>PT*</strong> preparatory class at Lycée Henri Loritz (Nancy), I am passionate about robust mechanical design, finite element simulation, and systems integration for demanding aerospace and space environments."
+          },
+          {
+            title: "⚙️ Current Activities & Campus Leadership",
+            type: "list",
+            items: [
+              "<strong>Aeronautics & Space:</strong> Designing a <strong>High-Altitude Solar Pseudo-Satellite (HAPS)</strong> as my final-year engineering project, active member of <strong>Aérosigma</strong>, and holder of the French <strong>BIA</strong> aeronautics certificate.",
+              "<strong>Leadership & Student Life:</strong> Team Leader at <strong>FizZteam</strong> (managing the SIGMA Clermont student hub, coordinating a 32-person team, finances, and campus events).",
+              "<strong>Outdoor & Field Balance:</strong> Regular outdoor sports practitioner and hands-on field experience in retail operations and web deployment (Bab'Kasia)."
+            ]
+          },
+          {
+            title: "🚀 Future Projects & Career Ambitions (2027+)",
+            type: "list",
+            items: [
+              "<strong>Short-Term Goal — Master's Thesis Internship (March 15 – September 25, 2027):</strong> Join an R&D, Structural Design, Testing, or Manufacturing Engineering team in the <strong>aerospace, space, or advanced robotics</strong> sector (France or Europe).",
+              "<strong>Engineering Vision:</strong> Contribute to the design and qualification of next-generation reusable launch vehicles, stratospheric platforms, or lightweight instrumented aerospace structures (Structural Health Monitoring)."
+            ]
+          }
+        ],
         postitTitle: "📌 Currently",
         postitItems: [
           "📍 Based in Clermont-Ferrand, France (SIGMA Clermont)",
@@ -979,7 +1078,7 @@
           contact: "✉️ Contact & Ref",
           trash: "🗑️ Behind_Scenes"
         },
-        skillsIntro: "Operational capabilities demonstrated across engineering projects, research internships, and leadership roles (from LinkedIn & project reports):",
+        skillsIntro: "Operational capabilities demonstrated across engineering projects, research internships, and leadership roles:",
         capabilities: [
           {
             icon: "📐",
@@ -1275,8 +1374,8 @@
     </div>
   </section>
 
-  <!-- FENÊTRE 1 : ACCUEIL INCARNÉ -->
-  <section class="window active" id="win-welcome" style="top: 64px; left: 160px;">
+  <!-- FENÊTRE 1 : ACCUEIL INCARNÉ + PROFIL DÉTAILLÉ & PROJETS FUTURS -->
+  <section class="window active" id="win-welcome" style="top: 56px; left: 150px; width: 740px;">
     <div class="window-header" onmousedown="startDrag(event, 'win-welcome')">
       <div class="window-controls">
         <button class="win-dot win-close" onclick="closeWindow('win-welcome')"></button>
@@ -1298,9 +1397,14 @@
       </div>
       <p id="welcome-text" style="margin-bottom:14px;"></p>
       <div class="btn-row">
-        <button class="btn-primary" onclick="startGuidedTour()" id="btn-tour"></button>
+        <button class="btn-primary" onclick="toggleProfileDetails()" id="btn-profile"></button>
         <button class="btn-secondary" onclick="openWindow('win-projects')" id="btn-projects"></button>
         <button class="btn-secondary" onclick="openWindow('win-cv')" id="btn-cv"></button>
+      </div>
+
+      <!-- SECTION DÉPLIABLE : PROFIL, ACTIVITÉS & PROJETS FUTURS -->
+      <div class="profile-deep-dive open" id="profile-deep-dive">
+        <div class="profile-grid" id="profile-sections-container"></div>
       </div>
     </div>
   </section>
@@ -1408,6 +1512,7 @@
   <script>
     let currentLang = "fr";
     let topZ = 20;
+    let isProfileOpen = true;
 
     function switchProjectTab(projIdx, tabIdx) {
       for (let t = 0; t < 3; t++) {
@@ -1418,6 +1523,15 @@
           panel.classList.toggle("active", t === tabIdx);
         }
       }
+    }
+
+    function toggleProfileDetails() {
+      isProfileOpen = !isProfileOpen;
+      const box = document.getElementById("profile-deep-dive");
+      const btn = document.getElementById("btn-profile");
+      const d = PORTFOLIO_DATA[currentLang];
+      box.classList.toggle("open", isProfileOpen);
+      btn.textContent = isProfileOpen ? d.btnProfileClose : d.btnProfile;
     }
 
     function renderLanguage() {
@@ -1435,9 +1549,21 @@
       document.getElementById("welcome-title").textContent = d.welcomeTitle;
       document.getElementById("welcome-sub").textContent = d.welcomeSub;
       document.getElementById("welcome-text").textContent = d.welcomeText;
-      document.getElementById("btn-tour").textContent = d.btnTour;
+      document.getElementById("btn-profile").textContent = isProfileOpen ? d.btnProfileClose : d.btnProfile;
       document.getElementById("btn-projects").textContent = d.btnProjects;
       document.getElementById("btn-cv").textContent = d.btnCV;
+
+      // Rendu de la section détaillée Profil, Activités & Projets Futurs
+      const profContainer = document.getElementById("profile-sections-container");
+      profContainer.innerHTML = d.profileSections.map(sec => `
+        <div class="profile-box">
+          <h4>${sec.title}</h4>
+          ${sec.type === "text"
+            ? `<p>${sec.content}</p>`
+            : `<ul>${sec.items.map(it => `<li>${it}</li>`).join("")}</ul>`
+          }
+        </div>
+      `).join("");
 
       document.getElementById("postit-title").textContent = d.postitTitle;
       const postitList = document.getElementById("postit-list");
@@ -1555,12 +1681,6 @@
         win.style.width = "96vw";
         win.style.height = "84vh";
       }
-    }
-
-    function startGuidedTour() {
-      openWindow("win-projects");
-      setTimeout(() => openWindow("win-skills"), 1600);
-      setTimeout(() => openWindow("win-cv"), 3200);
     }
 
     function copyEmail() {
